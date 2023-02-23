@@ -1,8 +1,7 @@
 package main
 
 import (
-	"encoding/json"
-	"net/http"
+	"todo-list/internal/routes"
 
 	"github.com/labstack/echo/v4"
 )
@@ -13,28 +12,31 @@ type Task struct {
 }
 
 func main() {
-	var tasks []Task = []Task{}
+	// var tasks []Task = []Task{}
 
 	e := echo.New()
-	e.GET("/", func(c echo.Context) error {
 
-		response, _ := json.Marshal(tasks)
+	routes.TasksRoute(e)
 
-		return c.JSON(http.StatusOK, string(response))
-	})
-	e.POST("/", func(context echo.Context) error {
-		var task Task
+	// e.GET("/", func(c echo.Context) error {
 
-		bindError := context.Bind(&task)
+	// 	response, _ := json.Marshal(tasks)
 
-		if bindError != nil {
-			context.String(http.StatusBadRequest, "bad request")
-		}
+	// 	return c.JSON(http.StatusOK, string(response))
+	// })
+	// e.POST("/", func(context echo.Context) error {
+	// 	var task Task
 
-		tasks = append(tasks, task)
+	// 	bindError := context.Bind(&task)
 
-		response, _ := json.Marshal(tasks)
-		return context.JSON(http.StatusOK, string(response))
-	})
+	// 	if bindError != nil {
+	// 		context.String(http.StatusBadRequest, "bad request")
+	// 	}
+
+	// 	tasks = append(tasks, task)
+
+	// 	response, _ := json.Marshal(tasks)
+	// 	return context.JSON(http.StatusOK, string(response))
+	// })
 	e.Logger.Fatal(e.Start(":1323"))
 }
