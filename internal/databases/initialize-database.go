@@ -12,15 +12,15 @@ import (
 var PostgresDB *gorm.DB
 
 func InitializePostgresDatabase() {
-	database, databaseError := gorm.Open(postgres.Open(os.Getenv("DATABASE_URL")), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(os.Getenv("DATABASE_URL")), &gorm.Config{})
 
-	if databaseError != nil {
+	if err != nil {
 		log.Fatalln("Error during database initialization")
 	}
 
-	if autoMigrateError := database.AutoMigrate(&tasks.Task{}); autoMigrateError != nil {
+	if autoMigrateError := db.AutoMigrate(&tasks.Task{}); autoMigrateError != nil {
 		log.Fatalln("Error during auto migration")
 	}
 
-	PostgresDB = database
+	PostgresDB = db
 }
