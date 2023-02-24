@@ -1,26 +1,26 @@
-package database
+package databases
 
 import (
 	"log"
 	"os"
-	"todo-list/internal/models"
+	tasks "todo-list/internal/modules/tasks/models"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
-var Database *gorm.DB
+var PostgresDB *gorm.DB
 
-func InitializeDatabase() {
+func InitializePostgresDatabase() {
 	database, databaseError := gorm.Open(postgres.Open(os.Getenv("DATABASE_URL")), &gorm.Config{})
 
 	if databaseError != nil {
 		log.Fatalln("Error during database initialization")
 	}
 
-	if autoMigrateError := database.AutoMigrate(&models.Task{}); autoMigrateError != nil {
+	if autoMigrateError := database.AutoMigrate(&tasks.Task{}); autoMigrateError != nil {
 		log.Fatalln("Error during auto migration")
 	}
 
-	Database = database
+	PostgresDB = database
 }
