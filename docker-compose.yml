@@ -1,0 +1,16 @@
+version: "3.1"
+services:
+  db:
+    image: "postgres:13"
+    restart: always
+    ports:
+      - "1212:5432"
+    environment:
+      - POSTGRES_DB=todolist-db
+      - POSTGRES_USER=todolist
+      - POSTGRES_PASSWORD=todolist
+    volumes:
+      - database_postgres:/var/lib/postgresql/data
+
+volumes:
+  database_postgres:
