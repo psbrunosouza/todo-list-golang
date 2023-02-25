@@ -3,7 +3,7 @@ package databases
 import (
 	"log"
 	"os"
-	tasks "todo-list/internal/modules/tasks/models"
+	tasks "todo-list/internal/modules/tasks/task_models"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"

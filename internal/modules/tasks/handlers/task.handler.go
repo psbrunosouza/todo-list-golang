@@ -1,11 +1,11 @@
-package tasks
+package task_handlers
 
 import (
 	"net/http"
 	"strconv"
 	errorhandlers "todo-list/internal/common/error_handlers"
-	taskModels "todo-list/internal/modules/tasks/models"
 	tasksService "todo-list/internal/modules/tasks/services"
+	taskModels "todo-list/internal/modules/tasks/task_models"
 
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"

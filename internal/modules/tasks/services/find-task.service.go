@@ -1,8 +1,8 @@
-package tasks
+package task_services
 
 import (
-	taskModel "todo-list/internal/modules/tasks/models"
-	tasks "todo-list/internal/modules/tasks/repositories"
+	taskModel "todo-list/internal/modules/tasks/task_models"
+	tasks "todo-list/internal/modules/tasks/task_repositories"
 )
 
 func FindTaskService(id int, task *taskModel.Task) error {

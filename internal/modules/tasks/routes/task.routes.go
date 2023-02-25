@@ -1,4 +1,4 @@
-package tasks
+package task_routes
 
 import (
 	taskHandlers "todo-list/internal/modules/tasks/handlers"

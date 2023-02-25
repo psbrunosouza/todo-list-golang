@@ -1,8 +1,8 @@
-package tasks
+package task_repositories
 
 import (
 	"todo-list/internal/databases"
-	taskModels "todo-list/internal/modules/tasks/models"
+	taskModels "todo-list/internal/modules/tasks/task_models"
 
 	"gorm.io/gorm"
 )
