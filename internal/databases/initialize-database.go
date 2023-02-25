@@ -3,7 +3,7 @@ package databases
 import (
 	"log"
 	"os"
-	tasks "todo-list/internal/modules/tasks/task_models"
+	task_models "todo-list/internal/modules/tasks/models"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -18,7 +18,7 @@ func InitializePostgresDatabase() {
 		log.Fatalln("Error during database initialization")
 	}
 
-	if autoMigrateError := db.AutoMigrate(&tasks.Task{}); autoMigrateError != nil {
+	if autoMigrateError := db.AutoMigrate(&task_models.Task{}); autoMigrateError != nil {
 		log.Fatalln("Error during auto migration")
 	}
 
