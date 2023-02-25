@@ -13,9 +13,13 @@ To understand project structure, I've created that database
 
 
 # 🏁 Get Started
-### Install postgres or use docker-compose to run database
+### Install postgres or use docker
 
 ```docker-compose up```
+
+### Install packages
+
+```go mod download```
 
 ### Run project main.go file
 
