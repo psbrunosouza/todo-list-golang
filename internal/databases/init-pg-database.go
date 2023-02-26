@@ -9,9 +9,11 @@ import (
 	"gorm.io/gorm"
 )
 
+// PostgresDB store the database instance
 var PostgresDB *gorm.DB
 
-func InitializePostgresDatabase() {
+// InitPGDatabase initialize postgres database
+func InitPGDatabase() {
 	db, err := gorm.Open(postgres.Open(os.Getenv("DATABASE_URL")), &gorm.Config{})
 
 	if err != nil {

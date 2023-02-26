@@ -1,4 +1,4 @@
-package task_models
+package tasks
 
 import "gorm.io/gorm"
 

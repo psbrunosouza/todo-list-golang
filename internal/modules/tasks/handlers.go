@@ -1,26 +1,24 @@
-package task_handlers
+package tasks
 
 import (
 	"net/http"
 	"strconv"
-	"todo-list/internal/common/error_handlers"
-	task_models "todo-list/internal/modules/tasks/models"
-	task_services "todo-list/internal/modules/tasks/services"
+	"todo-list/internal/common"
 
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 )
 
 func CreateTaskHandler(context echo.Context) error {
-	task := &task_models.Task{}
+	task := &Task{}
 
 	if bindErr := context.Bind(task); bindErr != nil {
-		err := error_handlers.NewGenericError(http.StatusBadRequest, bindErr)
+		err := common.NewAppError(http.StatusBadRequest, bindErr)
 		return context.JSON(http.StatusBadRequest, err)
 	}
 
-	if serviceErr := task_services.CreateTaskService(task); serviceErr != nil {
-		err := error_handlers.NewGenericError(http.StatusBadRequest, serviceErr)
+	if serviceErr := CreateTaskService(task); serviceErr != nil {
+		err := common.NewAppError(http.StatusBadRequest, serviceErr)
 		return context.JSON(http.StatusBadRequest, err)
 	} else {
 		return context.JSON(http.StatusCreated, task)
@@ -28,7 +26,7 @@ func CreateTaskHandler(context echo.Context) error {
 }
 
 func UpdateTaskHandler(context echo.Context) error {
-	task := &task_models.Task{}
+	task := &Task{}
 
 	context.Bind(task)
 
@@ -36,8 +34,8 @@ func UpdateTaskHandler(context echo.Context) error {
 
 	task.ID = uint(id)
 
-	if err := task_services.UpdateTaskService(task); err != nil {
-		g_err := error_handlers.NewGenericError(http.StatusBadRequest, err)
+	if err := UpdateTaskService(task); err != nil {
+		g_err := common.NewAppError(http.StatusBadRequest, err)
 		return context.JSON(http.StatusBadRequest, g_err)
 	} else {
 		return context.JSON(http.StatusOK, task)
@@ -45,10 +43,10 @@ func UpdateTaskHandler(context echo.Context) error {
 }
 
 func ListTaskHandler(context echo.Context) error {
-	var tasks []task_models.Task
+	var tasks []Task
 
-	if err := task_services.ListTasksService(&tasks); err != nil {
-		g_err := error_handlers.NewGenericError(http.StatusBadRequest, err)
+	if err := ListTasksService(&tasks); err != nil {
+		g_err := common.NewAppError(http.StatusBadRequest, err)
 		return context.JSON(http.StatusBadRequest, g_err)
 	} else {
 		return context.JSON(http.StatusOK, tasks)
@@ -56,12 +54,12 @@ func ListTaskHandler(context echo.Context) error {
 }
 
 func FindTaskHandler(context echo.Context) error {
-	task := &task_models.Task{}
+	task := &Task{}
 
 	id, _ := strconv.Atoi(context.Param("id"))
 
-	if err := task_services.FindTaskService(id, task); err != nil {
-		g_err := error_handlers.NewGenericError(http.StatusBadRequest, "Record not found")
+	if err := FindTaskService(id, task); err != nil {
+		g_err := common.NewAppError(http.StatusBadRequest, "Record not found")
 		return context.JSON(http.StatusBadRequest, g_err)
 	} else {
 		return context.JSON(http.StatusOK, task)
@@ -71,14 +69,14 @@ func FindTaskHandler(context echo.Context) error {
 func DeleteTaskHandler(context echo.Context) error {
 	id, _ := strconv.Atoi(context.Param("id"))
 
-	task := &task_models.Task{
+	task := &Task{
 		Model: gorm.Model{
 			ID: uint(id),
 		},
 	}
 
-	if err := task_services.DeleteTaskService(task); err != nil {
-		g_err := error_handlers.NewGenericError(http.StatusBadRequest, err)
+	if err := DeleteTaskService(task); err != nil {
+		g_err := common.NewAppError(http.StatusBadRequest, err)
 		return context.JSON(http.StatusBadRequest, g_err)
 	} else {
 		return context.JSON(http.StatusOK, string("{}"))

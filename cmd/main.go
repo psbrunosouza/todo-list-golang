@@ -4,7 +4,7 @@ import (
 	"log"
 	"os"
 	"todo-list/internal/databases"
-	taskRoutes "todo-list/internal/modules/tasks/routes"
+	task_routes "todo-list/internal/modules/tasks/routes"
 
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
@@ -15,13 +15,13 @@ func init() {
 		log.Fatal("Error loading .env file")
 	}
 
-	databases.InitializePostgresDatabase()
+	databases.InitPGDatabase()
 }
 
 func main() {
 	echo := echo.New()
 
-	taskRoutes.TasksRoutes(echo)
+	task_routes.TasksRoutes(echo)
 
 	echo.Logger.Fatal(echo.Start(os.Getenv("PORT")))
 }
