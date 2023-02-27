@@ -4,7 +4,8 @@ import (
 	"log"
 	"os"
 	"todo-list/internal/databases"
-	task_routes "todo-list/internal/modules/tasks/routes"
+	"todo-list/internal/modules/subtasks"
+	"todo-list/internal/modules/tasks"
 
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
@@ -15,13 +16,14 @@ func init() {
 		log.Fatal("Error loading .env file")
 	}
 
-	databases.InitPGDatabase()
+	databases.InitPGDatabase(&tasks.Task{}, &subtasks.SubTask{})
 }
 
 func main() {
 	echo := echo.New()
 
-	task_routes.TasksRoutes(echo)
+	tasks.TasksRoutes(echo)
+	subtasks.SubTaskRoutes(echo)
 
 	echo.Logger.Fatal(echo.Start(os.Getenv("PORT")))
 }
