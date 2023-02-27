@@ -6,7 +6,7 @@ services:
     ports:
       - "1212:5432"
     environment:
-      - POSTGRES_DB=todolist-db
+      - POSTGRES_DB=todolistdb
       - POSTGRES_USER=todolist
       - POSTGRES_PASSWORD=todolist
     volumes:

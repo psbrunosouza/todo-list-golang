@@ -6,6 +6,7 @@ import (
 	"todo-list/internal/databases"
 	"todo-list/internal/modules/subtasks"
 	"todo-list/internal/modules/tasks"
+	"todo-list/internal/modules/workspaces"
 
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
@@ -16,7 +17,7 @@ func init() {
 		log.Fatal("Error loading .env file")
 	}
 
-	databases.InitPGDatabase(&tasks.Task{}, &subtasks.SubTask{})
+	databases.InitPGDatabase(&tasks.Task{}, &subtasks.SubTask{}, &workspaces.Workspace{})
 }
 
 func main() {
