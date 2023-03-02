@@ -9,7 +9,7 @@ clean:
 build:
 	echo "Compiling for every OS and Platform"
 	mkdir -p ./bin
-	GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o ./bin/todoapp ./...
+	GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o ./bin ./...
 	
 run:
 	go run cmd/main.go
