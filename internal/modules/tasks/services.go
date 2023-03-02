@@ -1,6 +1,8 @@
 package tasks
 
-func CreateTaskService(task *Task) error {
+import "todo-list/internal/models"
+
+func CreateTaskService(task *models.Task) error {
 	if result := CreateTask(task); result.Error != nil {
 		return result.Error
 	} else {
@@ -8,7 +10,7 @@ func CreateTaskService(task *Task) error {
 	}
 }
 
-func DeleteTaskService(task *Task) error {
+func DeleteTaskService(task *models.Task) error {
 	if result := DeleteTask(task); result.Error != nil {
 		return result.Error
 	} else {
@@ -16,7 +18,7 @@ func DeleteTaskService(task *Task) error {
 	}
 }
 
-func FindTaskService(id int, task *Task) error {
+func FindTaskService(id int, task *models.Task) error {
 	if result := FindTask(id, task); result.Error != nil {
 		return result.Error
 	} else {
@@ -24,7 +26,7 @@ func FindTaskService(id int, task *Task) error {
 	}
 }
 
-func ListTasksService(tasks *[]Task) error {
+func ListTasksService(tasks *[]models.Task) error {
 	if result := ListTasks(tasks); result.Error != nil {
 		return result.Error
 	} else {
@@ -32,7 +34,7 @@ func ListTasksService(tasks *[]Task) error {
 	}
 }
 
-func UpdateTaskService(task *Task) error {
+func UpdateTaskService(task *models.Task) error {
 	if result := UpdateTask(task); result.Error != nil {
 		return result.Error
 	} else {

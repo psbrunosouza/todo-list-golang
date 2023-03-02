@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 	"todo-list/internal/databases"
+	"todo-list/internal/models"
 	"todo-list/internal/modules/subtasks"
 	"todo-list/internal/modules/tasks"
 	"todo-list/internal/modules/workspaces"
@@ -17,7 +18,7 @@ func init() {
 		log.Fatal("Error loading .env file")
 	}
 
-	databases.InitPGDatabase(&tasks.Task{}, &subtasks.SubTask{}, &workspaces.Workspace{})
+	databases.InitPGDatabase(&models.Task{}, &models.SubTask{}, &models.Workspace{})
 }
 
 func main() {
@@ -25,6 +26,7 @@ func main() {
 
 	tasks.TasksRoutes(echo)
 	subtasks.SubTaskRoutes(echo)
+	workspaces.WorspaceRoutes(echo)
 
 	echo.Logger.Fatal(echo.Start(os.Getenv("PORT")))
 }

@@ -4,13 +4,14 @@ import (
 	"net/http"
 	"strconv"
 	"todo-list/internal/common"
+	"todo-list/internal/models"
 
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 )
 
 func CreateTaskHandler(context echo.Context) error {
-	task := &Task{}
+	task := &models.Task{}
 
 	if bindErr := context.Bind(task); bindErr != nil {
 		err := common.NewAppError(http.StatusBadRequest, bindErr)
@@ -26,7 +27,7 @@ func CreateTaskHandler(context echo.Context) error {
 }
 
 func UpdateTaskHandler(context echo.Context) error {
-	task := &Task{}
+	task := &models.Task{}
 
 	context.Bind(task)
 
@@ -43,7 +44,7 @@ func UpdateTaskHandler(context echo.Context) error {
 }
 
 func ListTaskHandler(context echo.Context) error {
-	var tasks []Task
+	var tasks []models.Task
 
 	if err := ListTasksService(&tasks); err != nil {
 		g_err := common.NewAppError(http.StatusBadRequest, err)
@@ -54,7 +55,7 @@ func ListTaskHandler(context echo.Context) error {
 }
 
 func FindTaskHandler(context echo.Context) error {
-	task := &Task{}
+	task := &models.Task{}
 
 	id, _ := strconv.Atoi(context.Param("id"))
 
@@ -69,7 +70,7 @@ func FindTaskHandler(context echo.Context) error {
 func DeleteTaskHandler(context echo.Context) error {
 	id, _ := strconv.Atoi(context.Param("id"))
 
-	task := &Task{
+	task := &models.Task{
 		Model: gorm.Model{
 			ID: uint(id),
 		},

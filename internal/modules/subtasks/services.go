@@ -1,6 +1,8 @@
 package subtasks
 
-func CreateSubTaskService(subTask *SubTask) error {
+import "todo-list/internal/models"
+
+func CreateSubTaskService(subTask *models.SubTask) error {
 	if result := CreateSubTask(subTask); result.Error != nil {
 		return result.Error
 	} else {
@@ -8,7 +10,7 @@ func CreateSubTaskService(subTask *SubTask) error {
 	}
 }
 
-func UpdateSubTaskService(subTask *SubTask) error {
+func UpdateSubTaskService(subTask *models.SubTask) error {
 	if result := UpdateSubTask(subTask); result.Error != nil {
 		return result.Error
 	} else {
@@ -16,7 +18,7 @@ func UpdateSubTaskService(subTask *SubTask) error {
 	}
 }
 
-func FindSubTaskService(id int, subTask *SubTask) error {
+func FindSubTaskService(id int, subTask *models.SubTask) error {
 	if result := FindSubTask(id, subTask); result.Error != nil {
 		return result.Error
 	} else {
@@ -24,7 +26,7 @@ func FindSubTaskService(id int, subTask *SubTask) error {
 	}
 }
 
-func ListSubTasksService(subTasks *[]SubTask) error {
+func ListSubTasksService(subTasks *[]models.SubTask) error {
 	if result := ListSubTasks(subTasks); result.Error != nil {
 		return result.Error
 	} else {
@@ -32,7 +34,7 @@ func ListSubTasksService(subTasks *[]SubTask) error {
 	}
 }
 
-func DeleteSubTaskService(subTask *SubTask) error {
+func DeleteSubTaskService(subTask *models.SubTask) error {
 	if result := DeleteSubTask(subTask); result.Error != nil {
 		return result.Error
 	} else {

@@ -1,6 +1,8 @@
 package workspaces
 
-func CreateWorkspaceService(workspace *Workspace) error {
+import "todo-list/internal/models"
+
+func CreateWorkspaceService(workspace *models.Workspace) error {
 	if result := CreateWorkspace(workspace); result.Error != nil {
 		return result.Error
 	} else {
@@ -8,7 +10,7 @@ func CreateWorkspaceService(workspace *Workspace) error {
 	}
 }
 
-func DeleteWorkspaceService(workspace *Workspace) error {
+func DeleteWorkspaceService(workspace *models.Workspace) error {
 	if result := DeleteWorkspace(workspace); result.Error != nil {
 		return result.Error
 	} else {
@@ -16,7 +18,7 @@ func DeleteWorkspaceService(workspace *Workspace) error {
 	}
 }
 
-func FindWorkspaceService(id int, workspace *Workspace) error {
+func FindWorkspaceService(id int, workspace *models.Workspace) error {
 	if result := FindWorkspace(id, workspace); result.Error != nil {
 		return result.Error
 	} else {
@@ -24,7 +26,7 @@ func FindWorkspaceService(id int, workspace *Workspace) error {
 	}
 }
 
-func ListWorkspacesService(workspaces *[]Workspace) error {
+func ListWorkspacesService(workspaces *[]models.Workspace) error {
 	if result := ListWorkspace(workspaces); result.Error != nil {
 		return result.Error
 	} else {
@@ -32,7 +34,7 @@ func ListWorkspacesService(workspaces *[]Workspace) error {
 	}
 }
 
-func UpdateWorkspaceService(workspace *Workspace) error {
+func UpdateWorkspaceService(workspace *models.Workspace) error {
 	if result := UpdateWorkspace(workspace); result.Error != nil {
 		return result.Error
 	} else {

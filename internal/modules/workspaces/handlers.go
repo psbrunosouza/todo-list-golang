@@ -4,13 +4,16 @@ import (
 	"net/http"
 	"strconv"
 	"todo-list/internal/common"
+	"todo-list/internal/models"
 
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 )
 
 func CreateWorkspaceHandler(context echo.Context) error {
-	workspace := &Workspace{}
+	workspace := &models.Workspace{}
+
+	println(workspace)
 
 	if bindErr := context.Bind(workspace); bindErr != nil {
 		err := common.NewAppError(http.StatusBadRequest, bindErr)
@@ -26,7 +29,7 @@ func CreateWorkspaceHandler(context echo.Context) error {
 }
 
 func UpdateWorkspaceHandler(context echo.Context) error {
-	workspace := &Workspace{}
+	workspace := &models.Workspace{}
 
 	context.Bind(workspace)
 
@@ -43,7 +46,7 @@ func UpdateWorkspaceHandler(context echo.Context) error {
 }
 
 func ListWorkspacesHandler(context echo.Context) error {
-	var workspace []Workspace
+	var workspace []models.Workspace
 
 	if err := ListWorkspacesService(&workspace); err != nil {
 		g_err := common.NewAppError(http.StatusBadRequest, err)
@@ -54,7 +57,7 @@ func ListWorkspacesHandler(context echo.Context) error {
 }
 
 func FindWorkspaceHandler(context echo.Context) error {
-	workspace := &Workspace{}
+	workspace := &models.Workspace{}
 
 	id, _ := strconv.Atoi(context.Param("id"))
 
@@ -69,7 +72,7 @@ func FindWorkspaceHandler(context echo.Context) error {
 func DeleteWorkspaceHandler(context echo.Context) error {
 	id, _ := strconv.Atoi(context.Param("id"))
 
-	workspace := &Workspace{
+	workspace := &models.Workspace{
 		Model: gorm.Model{
 			ID: uint(id),
 		},
