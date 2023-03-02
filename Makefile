@@ -8,8 +8,8 @@ clean:
 
 build:
 	echo "Compiling for every OS and Platform"
-	mkdir ./bin
-	GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o ./bin ./...
+	mkdir -p ./bin
+	GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o ./bin/todoapp ./...
 	
 run:
 	go run cmd/main.go
