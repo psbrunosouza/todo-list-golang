@@ -15,7 +15,7 @@ RUN mkdir -p /app/bin
 RUN go mod tidy
 
 # Compila o projeto e cria o binário
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o ./bin/todoapp ./...
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o ./bin ./...
 
 # Define o comando padrão a ser executado ao rodar a imagem
-CMD ["./bin/todoapp"]
+CMD ["./bin/cmd"]
