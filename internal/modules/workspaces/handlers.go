@@ -7,7 +7,6 @@ import (
 	"todo-list/internal/models"
 
 	"github.com/labstack/echo/v4"
-	"gorm.io/gorm"
 )
 
 func CreateWorkspaceHandler(context echo.Context) error {
@@ -73,7 +72,7 @@ func DeleteWorkspaceHandler(context echo.Context) error {
 	id, _ := strconv.Atoi(context.Param("id"))
 
 	workspace := &models.Workspace{
-		Model: gorm.Model{
+		Default: models.Default{
 			ID: uint(id),
 		},
 	}

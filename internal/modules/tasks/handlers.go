@@ -7,7 +7,6 @@ import (
 	"todo-list/internal/models"
 
 	"github.com/labstack/echo/v4"
-	"gorm.io/gorm"
 )
 
 func CreateTaskHandler(context echo.Context) error {
@@ -71,7 +70,7 @@ func DeleteTaskHandler(context echo.Context) error {
 	id, _ := strconv.Atoi(context.Param("id"))
 
 	task := &models.Task{
-		Model: gorm.Model{
+		Default: models.Default{
 			ID: uint(id),
 		},
 	}

@@ -1,11 +1,7 @@
 package models
 
-import (
-	"gorm.io/gorm"
-)
-
 type Workspace struct {
-	gorm.Model
+	Default
 	Name  string `json:"name,omitempty" gorm:"not null;default:null;type:varchar(255)"`
-	Tasks []Task
+	Tasks []Task `json:"tasks,omitempty"`
 }
