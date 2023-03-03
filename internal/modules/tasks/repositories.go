@@ -18,7 +18,7 @@ func ListTasks(tasks *[]models.Task) (result *gorm.DB) {
 }
 
 func FindTask(id int, task *models.Task) (result *gorm.DB) {
-	return databases.PostgresDB.Preload("Workspace").Preload("Subtasks").Preload("Subtasks", func(db *gorm.DB) *gorm.DB {
+	return databases.PostgresDB.Preload("Workspace").Preload("Subtasks", func(db *gorm.DB) *gorm.DB {
 		return db.Select("id, name, description, task_id")
 	}).First(task, id)
 }

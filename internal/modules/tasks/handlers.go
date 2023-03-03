@@ -49,6 +49,7 @@ func ListTaskHandler(context echo.Context) error {
 		g_err := common.NewAppError(http.StatusBadRequest, err)
 		return context.JSON(http.StatusBadRequest, g_err)
 	} else {
+
 		return context.JSON(http.StatusOK, tasks)
 	}
 }
