@@ -20,7 +20,8 @@ func FindUser(id int, user *models.User) (result *gorm.DB) {
 }
 
 func UpdateUser(id int, user *models.User) (result *gorm.DB) {
-	return databases.PostgresDB.Model(user).Where("id = ?", id).Update("User", user)
+	databases.PostgresDB.Model(user).Where("id = ?", id).Updates(user)
+	return FindUser(id, user)
 }
 
 func DeleteUser(user *models.User) (result *gorm.DB) {

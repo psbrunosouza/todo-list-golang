@@ -20,7 +20,8 @@ func FindRating(id int, rating *models.Rating) (result *gorm.DB) {
 }
 
 func UpdateRating(id int, rating *models.Rating) (result *gorm.DB) {
-	return databases.PostgresDB.Model(rating).Where("id = ?", id).Update("rating", rating)
+	databases.PostgresDB.Model(rating).Where("id = ?", id).Updates(rating)
+	return FindRating(id, rating)
 }
 
 func DeleteRating(rating *models.Rating) (result *gorm.DB) {

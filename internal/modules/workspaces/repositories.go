@@ -20,7 +20,8 @@ func FindWorkspace(id int, workspace *models.Workspace) (result *gorm.DB) {
 }
 
 func UpdateWorkspace(id int, workspace *models.Workspace) (result *gorm.DB) {
-	return databases.PostgresDB.Model(workspace).Where("id = ?", id).Update("Workspace", workspace)
+	databases.PostgresDB.Model(workspace).Where("id = ?", id).Updates(workspace)
+	return FindWorkspace(id, workspace)
 }
 
 func DeleteWorkspace(workspace *models.Workspace) (result *gorm.DB) {

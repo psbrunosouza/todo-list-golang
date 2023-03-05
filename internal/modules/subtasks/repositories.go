@@ -20,7 +20,8 @@ func FindSubTask(id int, subtask *models.SubTask) (result *gorm.DB) {
 }
 
 func UpdateSubTask(id int, subtask *models.SubTask) (result *gorm.DB) {
-	return databases.PostgresDB.Model(subtask).Where("id = ?", id).Update("Subtask", subtask)
+	databases.PostgresDB.Model(subtask).Where("id = ?", id).Updates(subtask)
+	return FindSubTask(id, subtask)
 }
 
 func DeleteSubTask(subtask *models.SubTask) (result *gorm.DB) {

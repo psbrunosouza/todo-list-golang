@@ -20,7 +20,8 @@ func FindColor(id int, color *models.Color) (result *gorm.DB) {
 }
 
 func UpdateColor(id int, color *models.Color) (result *gorm.DB) {
-	return databases.PostgresDB.Model(color).Where("id = ?", id).Update("Color", color)
+	databases.PostgresDB.Model(color).Where("id = ?", id).Updates(color)
+	return FindColor(id, color)
 }
 
 func DeleteColor(color *models.Color) (result *gorm.DB) {

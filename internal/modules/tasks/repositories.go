@@ -24,7 +24,8 @@ func FindTask(id int, task *models.Task) (result *gorm.DB) {
 }
 
 func UpdateTask(id int, task *models.Task) (result *gorm.DB) {
-	return databases.PostgresDB.Model(task).Where("id = ?", id).Update("Task", task)
+	databases.PostgresDB.Model(task).Where("id = ?", id).Updates(task)
+	return FindTask(id, task)
 }
 
 func DeleteTask(task *models.Task) (result *gorm.DB) {
