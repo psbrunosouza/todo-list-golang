@@ -1,4 +1,4 @@
-package tasks
+package ratings
 
 import (
 	"net/http"
@@ -9,72 +9,71 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func CreateTaskHandler(context echo.Context) error {
-	task := &models.Task{}
+func CreateRatingHandler(context echo.Context) error {
+	rating := &models.Rating{}
 
-	if bindErr := context.Bind(task); bindErr != nil {
+	if bindErr := context.Bind(rating); bindErr != nil {
 		err := common.NewAppError(http.StatusBadRequest, bindErr)
 		return context.JSON(http.StatusBadRequest, err)
 	}
 
-	if serviceErr := CreateTaskService(task); serviceErr != nil {
+	if serviceErr := CreateRatingService(rating); serviceErr != nil {
 		err := common.NewAppError(http.StatusBadRequest, serviceErr)
 		return context.JSON(http.StatusBadRequest, err)
 	} else {
-		return context.JSON(http.StatusCreated, task)
+		return context.JSON(http.StatusCreated, rating)
 	}
 }
 
-func UpdateTaskHandler(context echo.Context) error {
-	task := &models.Task{}
+func UpdateRatingHandler(context echo.Context) error {
+	rating := &models.Rating{}
 
-	context.Bind(task)
+	context.Bind(rating)
 
 	id, _ := strconv.Atoi(context.Param("id"))
 
-	if err := UpdateTaskService(id, task); err != nil {
+	if err := UpdateRatingService(id, rating); err != nil {
 		g_err := common.NewAppError(http.StatusBadRequest, err)
 		return context.JSON(http.StatusBadRequest, g_err)
 	} else {
-		return context.JSON(http.StatusOK, task)
+		return context.JSON(http.StatusOK, rating)
 	}
 }
 
-func ListTaskHandler(context echo.Context) error {
-	var tasks []models.Task
+func ListRatingsHandler(context echo.Context) error {
+	var ratings []models.Rating
 
-	if err := ListTasksService(&tasks); err != nil {
+	if err := ListRatingsService(&ratings); err != nil {
 		g_err := common.NewAppError(http.StatusBadRequest, err)
 		return context.JSON(http.StatusBadRequest, g_err)
 	} else {
-
-		return context.JSON(http.StatusOK, tasks)
+		return context.JSON(http.StatusOK, ratings)
 	}
 }
 
-func FindTaskHandler(context echo.Context) error {
-	task := &models.Task{}
+func FindRatingHandler(context echo.Context) error {
+	rating := &models.Rating{}
 
 	id, _ := strconv.Atoi(context.Param("id"))
 
-	if err := FindTaskService(id, task); err != nil {
-		g_err := common.NewAppError(http.StatusBadRequest, "Record not found")
+	if err := FindRatingService(id, rating); err != nil {
+		g_err := common.NewAppError(http.StatusNotFound, "Record not found")
 		return context.JSON(http.StatusBadRequest, g_err)
 	} else {
-		return context.JSON(http.StatusOK, task)
+		return context.JSON(http.StatusOK, rating)
 	}
 }
 
-func DeleteTaskHandler(context echo.Context) error {
+func DeleteRatingHandler(context echo.Context) error {
 	id, _ := strconv.Atoi(context.Param("id"))
 
-	task := &models.Task{
+	rating := &models.Rating{
 		Default: models.Default{
 			ID: uint(id),
 		},
 	}
 
-	if err := DeleteTaskService(task); err != nil {
+	if err := DeleteRatingService(rating); err != nil {
 		g_err := common.NewAppError(http.StatusBadRequest, err)
 		return context.JSON(http.StatusBadRequest, g_err)
 	} else {

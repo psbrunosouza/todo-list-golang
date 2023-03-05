@@ -1,4 +1,4 @@
-package tasks
+package colors
 
 import (
 	"net/http"
@@ -9,72 +9,71 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func CreateTaskHandler(context echo.Context) error {
-	task := &models.Task{}
+func CreateColorHandler(context echo.Context) error {
+	color := &models.Color{}
 
-	if bindErr := context.Bind(task); bindErr != nil {
+	if bindErr := context.Bind(color); bindErr != nil {
 		err := common.NewAppError(http.StatusBadRequest, bindErr)
 		return context.JSON(http.StatusBadRequest, err)
 	}
 
-	if serviceErr := CreateTaskService(task); serviceErr != nil {
+	if serviceErr := CreateColorService(color); serviceErr != nil {
 		err := common.NewAppError(http.StatusBadRequest, serviceErr)
 		return context.JSON(http.StatusBadRequest, err)
 	} else {
-		return context.JSON(http.StatusCreated, task)
+		return context.JSON(http.StatusCreated, color)
 	}
 }
 
-func UpdateTaskHandler(context echo.Context) error {
-	task := &models.Task{}
+func UpdateColorHandler(context echo.Context) error {
+	color := &models.Color{}
 
-	context.Bind(task)
+	context.Bind(color)
 
 	id, _ := strconv.Atoi(context.Param("id"))
 
-	if err := UpdateTaskService(id, task); err != nil {
+	if err := UpdateColorService(id, color); err != nil {
 		g_err := common.NewAppError(http.StatusBadRequest, err)
 		return context.JSON(http.StatusBadRequest, g_err)
 	} else {
-		return context.JSON(http.StatusOK, task)
+		return context.JSON(http.StatusOK, color)
 	}
 }
 
-func ListTaskHandler(context echo.Context) error {
-	var tasks []models.Task
+func ListColorsHandler(context echo.Context) error {
+	var colors []models.Color
 
-	if err := ListTasksService(&tasks); err != nil {
+	if err := ListColorsService(&colors); err != nil {
 		g_err := common.NewAppError(http.StatusBadRequest, err)
 		return context.JSON(http.StatusBadRequest, g_err)
 	} else {
-
-		return context.JSON(http.StatusOK, tasks)
+		return context.JSON(http.StatusOK, colors)
 	}
 }
 
-func FindTaskHandler(context echo.Context) error {
-	task := &models.Task{}
+func FindColorHandler(context echo.Context) error {
+	color := &models.Color{}
 
 	id, _ := strconv.Atoi(context.Param("id"))
 
-	if err := FindTaskService(id, task); err != nil {
-		g_err := common.NewAppError(http.StatusBadRequest, "Record not found")
+	if err := FindColorService(id, color); err != nil {
+		g_err := common.NewAppError(http.StatusNotFound, "Record not found")
 		return context.JSON(http.StatusBadRequest, g_err)
 	} else {
-		return context.JSON(http.StatusOK, task)
+		return context.JSON(http.StatusOK, color)
 	}
 }
 
-func DeleteTaskHandler(context echo.Context) error {
+func DeleteColorHandler(context echo.Context) error {
 	id, _ := strconv.Atoi(context.Param("id"))
 
-	task := &models.Task{
+	color := &models.Color{
 		Default: models.Default{
 			ID: uint(id),
 		},
 	}
 
-	if err := DeleteTaskService(task); err != nil {
+	if err := DeleteColorService(color); err != nil {
 		g_err := common.NewAppError(http.StatusBadRequest, err)
 		return context.JSON(http.StatusBadRequest, g_err)
 	} else {

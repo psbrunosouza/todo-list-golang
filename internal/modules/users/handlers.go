@@ -1,4 +1,4 @@
-package tasks
+package users
 
 import (
 	"net/http"
@@ -9,72 +9,71 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func CreateTaskHandler(context echo.Context) error {
-	task := &models.Task{}
+func CreateUsersHandler(context echo.Context) error {
+	user := &models.User{}
 
-	if bindErr := context.Bind(task); bindErr != nil {
+	if bindErr := context.Bind(user); bindErr != nil {
 		err := common.NewAppError(http.StatusBadRequest, bindErr)
 		return context.JSON(http.StatusBadRequest, err)
 	}
 
-	if serviceErr := CreateTaskService(task); serviceErr != nil {
+	if serviceErr := CreateUserService(user); serviceErr != nil {
 		err := common.NewAppError(http.StatusBadRequest, serviceErr)
 		return context.JSON(http.StatusBadRequest, err)
 	} else {
-		return context.JSON(http.StatusCreated, task)
+		return context.JSON(http.StatusCreated, user)
 	}
 }
 
-func UpdateTaskHandler(context echo.Context) error {
-	task := &models.Task{}
+func UpdateUserHandler(context echo.Context) error {
+	user := &models.User{}
 
-	context.Bind(task)
+	context.Bind(user)
 
 	id, _ := strconv.Atoi(context.Param("id"))
 
-	if err := UpdateTaskService(id, task); err != nil {
+	if err := UpdateUserService(id, user); err != nil {
 		g_err := common.NewAppError(http.StatusBadRequest, err)
 		return context.JSON(http.StatusBadRequest, g_err)
 	} else {
-		return context.JSON(http.StatusOK, task)
+		return context.JSON(http.StatusOK, user)
 	}
 }
 
-func ListTaskHandler(context echo.Context) error {
-	var tasks []models.Task
+func ListUsersHandler(context echo.Context) error {
+	var users []models.User
 
-	if err := ListTasksService(&tasks); err != nil {
+	if err := ListUsersService(&users); err != nil {
 		g_err := common.NewAppError(http.StatusBadRequest, err)
 		return context.JSON(http.StatusBadRequest, g_err)
 	} else {
-
-		return context.JSON(http.StatusOK, tasks)
+		return context.JSON(http.StatusOK, users)
 	}
 }
 
-func FindTaskHandler(context echo.Context) error {
-	task := &models.Task{}
+func FindUserHandler(context echo.Context) error {
+	user := &models.User{}
 
 	id, _ := strconv.Atoi(context.Param("id"))
 
-	if err := FindTaskService(id, task); err != nil {
+	if err := FindUserService(id, user); err != nil {
 		g_err := common.NewAppError(http.StatusBadRequest, "Record not found")
 		return context.JSON(http.StatusBadRequest, g_err)
 	} else {
-		return context.JSON(http.StatusOK, task)
+		return context.JSON(http.StatusOK, user)
 	}
 }
 
-func DeleteTaskHandler(context echo.Context) error {
+func DeleteUserHandler(context echo.Context) error {
 	id, _ := strconv.Atoi(context.Param("id"))
 
-	task := &models.Task{
+	user := &models.User{
 		Default: models.Default{
 			ID: uint(id),
 		},
 	}
 
-	if err := DeleteTaskService(task); err != nil {
+	if err := DeleteUserService(user); err != nil {
 		g_err := common.NewAppError(http.StatusBadRequest, err)
 		return context.JSON(http.StatusBadRequest, g_err)
 	} else {

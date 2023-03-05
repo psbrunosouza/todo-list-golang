@@ -34,8 +34,8 @@ func ListWorkspacesService(workspaces *[]models.Workspace) error {
 	}
 }
 
-func UpdateWorkspaceService(workspace *models.Workspace) error {
-	if result := UpdateWorkspace(workspace); result.Error != nil {
+func UpdateWorkspaceService(id int, workspace *models.Workspace) error {
+	if result := UpdateWorkspace(id, workspace); result.Error != nil {
 		return result.Error
 	} else {
 		return nil

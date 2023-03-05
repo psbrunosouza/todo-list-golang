@@ -34,8 +34,8 @@ func ListTasksService(tasks *[]models.Task) error {
 	}
 }
 
-func UpdateTaskService(task *models.Task) error {
-	if result := UpdateTask(task); result.Error != nil {
+func UpdateTaskService(id int, task *models.Task) error {
+	if result := UpdateTask(id, task); result.Error != nil {
 		return result.Error
 	} else {
 		return nil

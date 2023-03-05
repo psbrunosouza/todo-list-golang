@@ -32,9 +32,7 @@ func UpdateSubTaskHandler(context echo.Context) error {
 
 	id, _ := strconv.Atoi(context.Param("id"))
 
-	subtask.ID = uint(id)
-
-	if err := UpdateSubTaskService(subtask); err != nil {
+	if err := UpdateSubTaskService(id, subtask); err != nil {
 		g_err := common.NewAppError(http.StatusBadRequest, err)
 		return context.JSON(http.StatusBadRequest, g_err)
 	} else {

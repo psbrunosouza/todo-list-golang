@@ -12,15 +12,15 @@ func CreateSubTask(subtask *models.SubTask) (result *gorm.DB) {
 }
 
 func ListSubTasks(subtasks *[]models.SubTask) (result *gorm.DB) {
-	return databases.PostgresDB.Preload("Task").Find(subtasks)
+	return databases.PostgresDB.Find(subtasks)
 }
 
 func FindSubTask(id int, subtask *models.SubTask) (result *gorm.DB) {
-	return databases.PostgresDB.Preload("Task").First(subtask, id)
+	return databases.PostgresDB.First(subtask, id)
 }
 
-func UpdateSubTask(subtask *models.SubTask) (result *gorm.DB) {
-	return databases.PostgresDB.Save(subtask)
+func UpdateSubTask(id int, subtask *models.SubTask) (result *gorm.DB) {
+	return databases.PostgresDB.Model(subtask).Where("id = ?", id).Update("Subtask", subtask)
 }
 
 func DeleteSubTask(subtask *models.SubTask) (result *gorm.DB) {

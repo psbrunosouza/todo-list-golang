@@ -10,8 +10,8 @@ func CreateSubTaskService(subTask *models.SubTask) error {
 	}
 }
 
-func UpdateSubTaskService(subTask *models.SubTask) error {
-	if result := UpdateSubTask(subTask); result.Error != nil {
+func UpdateSubTaskService(id int, subTask *models.SubTask) error {
+	if result := UpdateSubTask(id, subTask); result.Error != nil {
 		return result.Error
 	} else {
 		return nil

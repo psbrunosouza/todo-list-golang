@@ -19,8 +19,8 @@ func FindWorkspace(id int, workspace *models.Workspace) (result *gorm.DB) {
 	return databases.PostgresDB.Preload("Tasks").Preload("Tasks.Workspace").First(workspace, id)
 }
 
-func UpdateWorkspace(workspace *models.Workspace) (result *gorm.DB) {
-	return databases.PostgresDB.Save(workspace)
+func UpdateWorkspace(id int, workspace *models.Workspace) (result *gorm.DB) {
+	return databases.PostgresDB.Model(workspace).Where("id = ?", id).Update("Workspace", workspace)
 }
 
 func DeleteWorkspace(workspace *models.Workspace) (result *gorm.DB) {

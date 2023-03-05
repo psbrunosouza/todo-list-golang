@@ -34,9 +34,7 @@ func UpdateWorkspaceHandler(context echo.Context) error {
 
 	id, _ := strconv.Atoi(context.Param("id"))
 
-	workspace.ID = uint(id)
-
-	if err := UpdateWorkspaceService(workspace); err != nil {
+	if err := UpdateWorkspaceService(id, workspace); err != nil {
 		g_err := common.NewAppError(http.StatusBadRequest, err)
 		return context.JSON(http.StatusBadRequest, g_err)
 	} else {
