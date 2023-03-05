@@ -13,3 +13,6 @@ build:
 	
 run:
 	go run cmd/main.go
+
+install:
+	go mod tidy
