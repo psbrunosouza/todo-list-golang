@@ -10,7 +10,6 @@ Golang restAPI created to learn web develoment in GO using echo framework.
 To understand project structure, I've created that database model
 
 <div style="display: flex; justify-content: center; align-items: center; flex-direction: column">
-  <a target="_blank" href="https://drawsql.app/teams/moebs-team/diagrams/task-app-diagram">DrawSQL DER</a>
   <img alt="database_der" src="https://i.imgur.com/tflFGTg.png"/>
 </div>
 
