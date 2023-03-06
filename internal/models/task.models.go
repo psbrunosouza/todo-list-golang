@@ -4,7 +4,8 @@ type Task struct {
 	Default
 	Description string    `json:"description,omitempty" gorm:"not null;default:null"`
 	Name        string    `json:"name,omitempty" gorm:"not null;default:null;type:varchar(255)"`
-	Done        bool      `json:"done,omitempty" gorm:"default:false;"`
+	IsDone      bool      `json:"isDone,omitempty" gorm:"default:false;"`
+	IsLoop      bool      `json:"isLoop,omitempty" gorm:"default:false;"`
 	Workspace   Workspace `json:"-" gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	WorkspaceID int       `json:"workspaceID,omitempty" gorm:"default:null;"`
 	Color       Color     `json:"-" gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`

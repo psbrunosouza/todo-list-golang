@@ -80,3 +80,16 @@ func ListSubTasksHandler(context echo.Context) error {
 		return context.JSON(http.StatusOK, subtasks)
 	}
 }
+
+func MarkSubtaskAsDoneHandler(context echo.Context) error {
+	subtask := &models.SubTask{}
+
+	id, _ := strconv.Atoi(context.Param("id"))
+
+	if err := MarkAsDoneService(id, subtask); err != nil {
+		g_err := common.NewAppError(http.StatusBadRequest, err)
+		return context.JSON(http.StatusBadRequest, g_err)
+	} else {
+		return context.JSON(http.StatusOK, subtask)
+	}
+}

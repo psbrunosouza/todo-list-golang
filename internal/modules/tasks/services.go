@@ -41,3 +41,11 @@ func UpdateTaskService(id int, task *models.Task) error {
 		return nil
 	}
 }
+
+func MarkTaskAsDoneService(id int, task *models.Task) error {
+	if result := MarkTaskAsDone(id, task); result.Error != nil {
+		return result.Error
+	} else {
+		return nil
+	}
+}

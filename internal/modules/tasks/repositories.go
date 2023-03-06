@@ -31,3 +31,8 @@ func UpdateTask(id int, task *models.Task) (result *gorm.DB) {
 func DeleteTask(task *models.Task) (result *gorm.DB) {
 	return databases.PostgresDB.Unscoped().Delete(task)
 }
+
+func MarkTaskAsDone(id int, task *models.Task) *gorm.DB {
+	databases.PostgresDB.Model(task).Where("id = ?", id).Update("is_done", true)
+	return FindTask(id, task)
+}
