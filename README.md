@@ -10,7 +10,7 @@ Golang restAPI created to learn web develoment in GO using echo framework.
 To understand project structure, I've created that database model
 
 <div style="display: flex; justify-content: center; align-items: center; flex-direction: column">
-  <img alt="database_der" src="https://i.imgur.com/tflFGTg.png"/>
+  <img alt="database_der" src="https://i.imgur.com/hV29CBa.png"/>
 </div>
 
 
