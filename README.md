@@ -5,6 +5,9 @@ Golang restAPI created to learn web develoment in GO using echo framework.
 - Create tasks
 - Create subtasks
 - Create workspaces
+- Create colors
+- Create ratings
+- Create users
 
 # 📋 Database Model
 To understand project structure, I've created that database model
@@ -13,6 +16,12 @@ To understand project structure, I've created that database model
   <img alt="database_der" src="https://i.imgur.com/hV29CBa.png"/>
 </div>
 
+# 📑 Business Rules
+
+- To create a new workspace we need to be loogged in the application
+- To create a task with spaced repetition we need to create an iteration and add the task to it
+- To mark as complete any task we need check if all the the subtasks were completed too 
+  and request user confirmation to confirm
 
 # 🏁 Get Started
 ### Install postgres or use docker
