@@ -6,6 +6,8 @@ import (
 	"todo-list/internal/databases"
 	"todo-list/internal/models"
 	"todo-list/internal/modules/colors"
+	"todo-list/internal/modules/iterations"
+	"todo-list/internal/modules/iterationsettings"
 	"todo-list/internal/modules/ratings"
 	"todo-list/internal/modules/subtasks"
 	"todo-list/internal/modules/tasks"
@@ -28,6 +30,8 @@ func init() {
 		&models.User{},
 		&models.Color{},
 		&models.Rating{},
+		&models.Iteration{},
+		&models.IterationSetting{},
 	)
 }
 
@@ -40,6 +44,8 @@ func main() {
 	users.UserRoutes(echo)
 	ratings.RatingRoutes(echo)
 	colors.ColorRoutes(echo)
+	iterationsettings.IterationSettingsRoutes(echo)
+	iterations.IterationRoutes(echo)
 
 	echo.Logger.Fatal(echo.Start(os.Getenv("PORT")))
 }
