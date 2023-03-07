@@ -81,16 +81,3 @@ func DeleteTaskHandler(context echo.Context) error {
 		return context.JSON(http.StatusOK, task)
 	}
 }
-
-func CreateNewTaskIterationHandler(context echo.Context) error {
-	task := &models.Task{}
-
-	id, _ := strconv.Atoi(context.Param("id"))
-
-	if err := MarkTaskAsDone(id, task); err != nil {
-		g_err := common.NewAppError(http.StatusBadRequest, err)
-		return context.JSON(http.StatusBadRequest, g_err)
-	} else {
-		return context.JSON(http.StatusOK, task)
-	}
-}

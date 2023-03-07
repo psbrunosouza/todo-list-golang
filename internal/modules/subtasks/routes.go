@@ -10,5 +10,4 @@ func SubTaskRoutes(e *echo.Echo) {
 	e.PUT("/subtasks/:id", UpdateSubTaskHandler)
 	e.DELETE("/subtasks/:id", DeleteSubTaskHandler)
 	e.GET("/subtasks/:id", FindSubTaskHandler)
-	e.PATCH("/subtasks/mark_as_done/:id", MarkSubtaskAsDoneHandler)
 }

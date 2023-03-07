@@ -28,7 +28,3 @@ func DeleteSubTask(subtask *models.SubTask) (result *gorm.DB) {
 	return databases.PostgresDB.Unscoped().Delete(subtask)
 }
 
-func MarkAsDone(id int, subtask *models.SubTask) *gorm.DB {
-	databases.PostgresDB.Model(subtask).Where("id = ?", id).Update("is_done", true)
-	return FindSubTask(id, subtask)
-}

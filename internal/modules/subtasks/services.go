@@ -41,11 +41,3 @@ func DeleteSubTaskService(subTask *models.SubTask) error {
 		return nil
 	}
 }
-
-func MarkAsDoneService(id int, subtask *models.SubTask) error {
-	if result := MarkAsDone(id, subtask); result.Error != nil {
-		return result.Error
-	} else {
-		return nil
-	}
-}
