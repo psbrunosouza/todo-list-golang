@@ -30,7 +30,7 @@ To understand project structure, I've created that database model
 
 ### Install packages
 
-```go mod download or make install```
+```go mod tidy or make install```
 
 ### Run project main.go file
 
