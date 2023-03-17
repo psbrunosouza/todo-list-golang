@@ -1,8 +1,8 @@
 package ratings
 
-import "todo-list/internal/models"
+import "todo-list/internal/entities"
 
-func CreateRatingService(rating *models.Rating) error {
+func CreateRatingService(rating *entities.Rating) error {
 	if result := CreateRating(rating); result.Error != nil {
 		return result.Error
 	} else {
@@ -10,7 +10,7 @@ func CreateRatingService(rating *models.Rating) error {
 	}
 }
 
-func DeleteRatingService(rating *models.Rating) error {
+func DeleteRatingService(rating *entities.Rating) error {
 	if result := DeleteRating(rating); result.Error != nil {
 		return result.Error
 	} else {
@@ -18,7 +18,7 @@ func DeleteRatingService(rating *models.Rating) error {
 	}
 }
 
-func FindRatingService(id int, rating *models.Rating) error {
+func FindRatingService(id int, rating *entities.Rating) error {
 	if result := FindRating(id, rating); result.Error != nil {
 		return result.Error
 	} else {
@@ -26,7 +26,7 @@ func FindRatingService(id int, rating *models.Rating) error {
 	}
 }
 
-func ListRatingsService(ratings *[]models.Rating) error {
+func ListRatingsService(ratings *[]entities.Rating) error {
 	if result := ListRatings(ratings); result.Error != nil {
 		return result.Error
 	} else {
@@ -34,7 +34,7 @@ func ListRatingsService(ratings *[]models.Rating) error {
 	}
 }
 
-func UpdateRatingService(id int, rating *models.Rating) error {
+func UpdateRatingService(id int, rating *entities.Rating) error {
 	if result := UpdateRating(id, rating); result.Error != nil {
 		return result.Error
 	} else {

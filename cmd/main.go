@@ -4,7 +4,7 @@ import (
 	"log"
 	"os"
 	"todo-list/internal/databases"
-	"todo-list/internal/models"
+	"todo-list/internal/entities"
 	"todo-list/internal/modules/colors"
 	"todo-list/internal/modules/iterations"
 	"todo-list/internal/modules/iterationsettings"
@@ -24,14 +24,14 @@ func init() {
 	}
 
 	databases.InitPGDatabase(
-		&models.Task{},
-		&models.SubTask{},
-		&models.Workspace{},
-		&models.User{},
-		&models.Color{},
-		&models.Rating{},
-		&models.Iteration{},
-		&models.IterationSetting{},
+		&entities.Task{},
+		&entities.SubTask{},
+		&entities.Workspace{},
+		&entities.User{},
+		&entities.Color{},
+		&entities.Rating{},
+		&entities.Iteration{},
+		&entities.IterationSetting{},
 	)
 }
 

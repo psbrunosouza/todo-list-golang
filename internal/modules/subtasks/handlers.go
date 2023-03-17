@@ -4,13 +4,13 @@ import (
 	"net/http"
 	"strconv"
 	"todo-list/internal/common"
-	"todo-list/internal/models"
+	"todo-list/internal/entities"
 
 	"github.com/labstack/echo/v4"
 )
 
 func CreateSubTaskHandler(context echo.Context) error {
-	subtask := &models.SubTask{}
+	subtask := &entities.SubTask{}
 
 	if bindErr := context.Bind(subtask); bindErr != nil {
 		err := common.NewAppError(http.StatusBadRequest, bindErr)
@@ -26,7 +26,7 @@ func CreateSubTaskHandler(context echo.Context) error {
 }
 
 func UpdateSubTaskHandler(context echo.Context) error {
-	subtask := &models.SubTask{}
+	subtask := &entities.SubTask{}
 
 	context.Bind(subtask)
 
@@ -43,8 +43,8 @@ func UpdateSubTaskHandler(context echo.Context) error {
 func DeleteSubTaskHandler(context echo.Context) error {
 	id, _ := strconv.Atoi(context.Param("id"))
 
-	subtask := &models.SubTask{
-		Default: models.Default{
+	subtask := &entities.SubTask{
+		Default: entities.Default{
 			ID: uint(id),
 		},
 	}
@@ -58,7 +58,7 @@ func DeleteSubTaskHandler(context echo.Context) error {
 }
 
 func FindSubTaskHandler(context echo.Context) error {
-	subtask := &models.SubTask{}
+	subtask := &entities.SubTask{}
 
 	id, _ := strconv.Atoi(context.Param("id"))
 
@@ -71,7 +71,7 @@ func FindSubTaskHandler(context echo.Context) error {
 }
 
 func ListSubTasksHandler(context echo.Context) error {
-	var subtasks []models.SubTask
+	var subtasks []entities.SubTask
 
 	if err := ListSubTasksService(&subtasks); err != nil {
 		g_err := common.NewAppError(http.StatusBadRequest, err)

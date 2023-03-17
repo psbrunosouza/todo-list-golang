@@ -4,13 +4,13 @@ import (
 	"net/http"
 	"strconv"
 	"todo-list/internal/common"
-	"todo-list/internal/models"
+	"todo-list/internal/entities"
 
 	"github.com/labstack/echo/v4"
 )
 
 func CreateWorkspaceHandler(context echo.Context) error {
-	workspace := &models.Workspace{}
+	workspace := &entities.Workspace{}
 
 	println(workspace)
 
@@ -28,7 +28,7 @@ func CreateWorkspaceHandler(context echo.Context) error {
 }
 
 func UpdateWorkspaceHandler(context echo.Context) error {
-	workspace := &models.Workspace{}
+	workspace := &entities.Workspace{}
 
 	context.Bind(workspace)
 
@@ -43,7 +43,7 @@ func UpdateWorkspaceHandler(context echo.Context) error {
 }
 
 func ListWorkspacesHandler(context echo.Context) error {
-	var workspace []models.Workspace
+	var workspace []entities.Workspace
 
 	if err := ListWorkspacesService(&workspace); err != nil {
 		g_err := common.NewAppError(http.StatusBadRequest, err)
@@ -54,7 +54,7 @@ func ListWorkspacesHandler(context echo.Context) error {
 }
 
 func FindWorkspaceHandler(context echo.Context) error {
-	workspace := &models.Workspace{}
+	workspace := &entities.Workspace{}
 
 	id, _ := strconv.Atoi(context.Param("id"))
 
@@ -69,8 +69,8 @@ func FindWorkspaceHandler(context echo.Context) error {
 func DeleteWorkspaceHandler(context echo.Context) error {
 	id, _ := strconv.Atoi(context.Param("id"))
 
-	workspace := &models.Workspace{
-		Default: models.Default{
+	workspace := &entities.Workspace{
+		Default: entities.Default{
 			ID: uint(id),
 		},
 	}

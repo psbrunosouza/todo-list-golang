@@ -4,13 +4,13 @@ import (
 	"net/http"
 	"strconv"
 	"todo-list/internal/common"
-	"todo-list/internal/models"
+	"todo-list/internal/entities"
 
 	"github.com/labstack/echo/v4"
 )
 
 func CreateUsersHandler(context echo.Context) error {
-	user := &models.User{}
+	user := &entities.User{}
 
 	if bindErr := context.Bind(user); bindErr != nil {
 		err := common.NewAppError(http.StatusBadRequest, bindErr)
@@ -26,7 +26,7 @@ func CreateUsersHandler(context echo.Context) error {
 }
 
 func UpdateUserHandler(context echo.Context) error {
-	user := &models.User{}
+	user := &entities.User{}
 
 	context.Bind(user)
 
@@ -41,7 +41,7 @@ func UpdateUserHandler(context echo.Context) error {
 }
 
 func ListUsersHandler(context echo.Context) error {
-	var users []models.User
+	var users []entities.User
 
 	if err := ListUsersService(&users); err != nil {
 		g_err := common.NewAppError(http.StatusBadRequest, err)
@@ -52,7 +52,7 @@ func ListUsersHandler(context echo.Context) error {
 }
 
 func FindUserHandler(context echo.Context) error {
-	user := &models.User{}
+	user := &entities.User{}
 
 	id, _ := strconv.Atoi(context.Param("id"))
 
@@ -67,8 +67,8 @@ func FindUserHandler(context echo.Context) error {
 func DeleteUserHandler(context echo.Context) error {
 	id, _ := strconv.Atoi(context.Param("id"))
 
-	user := &models.User{
-		Default: models.Default{
+	user := &entities.User{
+		Default: entities.Default{
 			ID: uint(id),
 		},
 	}

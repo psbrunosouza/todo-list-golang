@@ -4,13 +4,13 @@ import (
 	"net/http"
 	"strconv"
 	"todo-list/internal/common"
-	"todo-list/internal/models"
+	"todo-list/internal/entities"
 
 	"github.com/labstack/echo/v4"
 )
 
 func CreateRatingHandler(context echo.Context) error {
-	rating := &models.Rating{}
+	rating := &entities.Rating{}
 
 	if bindErr := context.Bind(rating); bindErr != nil {
 		err := common.NewAppError(http.StatusBadRequest, bindErr)
@@ -26,7 +26,7 @@ func CreateRatingHandler(context echo.Context) error {
 }
 
 func UpdateRatingHandler(context echo.Context) error {
-	rating := &models.Rating{}
+	rating := &entities.Rating{}
 
 	context.Bind(rating)
 
@@ -41,7 +41,7 @@ func UpdateRatingHandler(context echo.Context) error {
 }
 
 func ListRatingsHandler(context echo.Context) error {
-	var ratings []models.Rating
+	var ratings []entities.Rating
 
 	if err := ListRatingsService(&ratings); err != nil {
 		g_err := common.NewAppError(http.StatusBadRequest, err)
@@ -52,7 +52,7 @@ func ListRatingsHandler(context echo.Context) error {
 }
 
 func FindRatingHandler(context echo.Context) error {
-	rating := &models.Rating{}
+	rating := &entities.Rating{}
 
 	id, _ := strconv.Atoi(context.Param("id"))
 
@@ -67,8 +67,8 @@ func FindRatingHandler(context echo.Context) error {
 func DeleteRatingHandler(context echo.Context) error {
 	id, _ := strconv.Atoi(context.Param("id"))
 
-	rating := &models.Rating{
-		Default: models.Default{
+	rating := &entities.Rating{
+		Default: entities.Default{
 			ID: uint(id),
 		},
 	}

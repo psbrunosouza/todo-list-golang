@@ -1,8 +1,8 @@
 package iterations
 
-import "todo-list/internal/models"
+import "todo-list/internal/entities"
 
-func CreateIterationService(iteration *models.Iteration) error {
+func CreateIterationService(iteration *entities.Iteration) error {
 	if result := CreateIteration(iteration); result.Error != nil {
 		return result.Error
 	} else {
@@ -10,7 +10,7 @@ func CreateIterationService(iteration *models.Iteration) error {
 	}
 }
 
-func DeleteIterationService(iteration *models.Iteration) error {
+func DeleteIterationService(iteration *entities.Iteration) error {
 	if result := DeleteIteration(iteration); result.Error != nil {
 		return result.Error
 	} else {
@@ -18,7 +18,7 @@ func DeleteIterationService(iteration *models.Iteration) error {
 	}
 }
 
-func FindIterationService(id int, iteration *models.Iteration) error {
+func FindIterationService(id int, iteration *entities.Iteration) error {
 	if result := FindIteration(id, iteration); result.Error != nil {
 		return result.Error
 	} else {
@@ -26,7 +26,7 @@ func FindIterationService(id int, iteration *models.Iteration) error {
 	}
 }
 
-func ListIterationsService(iteration *[]models.Iteration) error {
+func ListIterationsService(iteration *[]entities.Iteration) error {
 	if result := ListIterations(iteration); result.Error != nil {
 		return result.Error
 	} else {
@@ -34,7 +34,7 @@ func ListIterationsService(iteration *[]models.Iteration) error {
 	}
 }
 
-func UpdateIterationService(id int, iteration *models.Iteration) error {
+func UpdateIterationService(id int, iteration *entities.Iteration) error {
 	if result := UpdateIteration(id, iteration); result.Error != nil {
 		return result.Error
 	} else {

@@ -4,13 +4,13 @@ import (
 	"net/http"
 	"strconv"
 	"todo-list/internal/common"
-	"todo-list/internal/models"
+	"todo-list/internal/entities"
 
 	"github.com/labstack/echo/v4"
 )
 
 func CreateColorHandler(context echo.Context) error {
-	color := &models.Color{}
+	color := &entities.Color{}
 
 	if bindErr := context.Bind(color); bindErr != nil {
 		err := common.NewAppError(http.StatusBadRequest, bindErr)
@@ -26,7 +26,7 @@ func CreateColorHandler(context echo.Context) error {
 }
 
 func UpdateColorHandler(context echo.Context) error {
-	color := &models.Color{}
+	color := &entities.Color{}
 
 	context.Bind(color)
 
@@ -41,7 +41,7 @@ func UpdateColorHandler(context echo.Context) error {
 }
 
 func ListColorsHandler(context echo.Context) error {
-	var colors []models.Color
+	var colors []entities.Color
 
 	if err := ListColorsService(&colors); err != nil {
 		g_err := common.NewAppError(http.StatusBadRequest, err)
@@ -52,7 +52,7 @@ func ListColorsHandler(context echo.Context) error {
 }
 
 func FindColorHandler(context echo.Context) error {
-	color := &models.Color{}
+	color := &entities.Color{}
 
 	id, _ := strconv.Atoi(context.Param("id"))
 
@@ -67,8 +67,8 @@ func FindColorHandler(context echo.Context) error {
 func DeleteColorHandler(context echo.Context) error {
 	id, _ := strconv.Atoi(context.Param("id"))
 
-	color := &models.Color{
-		Default: models.Default{
+	color := &entities.Color{
+		Default: entities.Default{
 			ID: uint(id),
 		},
 	}

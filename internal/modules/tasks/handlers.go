@@ -4,13 +4,13 @@ import (
 	"net/http"
 	"strconv"
 	"todo-list/internal/common"
-	"todo-list/internal/models"
+	"todo-list/internal/entities"
 
 	"github.com/labstack/echo/v4"
 )
 
 func CreateTaskHandler(context echo.Context) error {
-	task := &models.Task{}
+	task := &entities.Task{}
 
 	if bindErr := context.Bind(task); bindErr != nil {
 		err := common.NewAppError(http.StatusBadRequest, bindErr)
@@ -26,7 +26,7 @@ func CreateTaskHandler(context echo.Context) error {
 }
 
 func UpdateTaskHandler(context echo.Context) error {
-	task := &models.Task{}
+	task := &entities.Task{}
 
 	context.Bind(task)
 
@@ -41,7 +41,7 @@ func UpdateTaskHandler(context echo.Context) error {
 }
 
 func ListTaskHandler(context echo.Context) error {
-	var tasks []models.Task
+	var tasks []entities.Task
 
 	if err := ListTasksService(&tasks); err != nil {
 		g_err := common.NewAppError(http.StatusBadRequest, err)
@@ -53,7 +53,7 @@ func ListTaskHandler(context echo.Context) error {
 }
 
 func FindTaskHandler(context echo.Context) error {
-	task := &models.Task{}
+	task := &entities.Task{}
 
 	id, _ := strconv.Atoi(context.Param("id"))
 
@@ -68,8 +68,8 @@ func FindTaskHandler(context echo.Context) error {
 func DeleteTaskHandler(context echo.Context) error {
 	id, _ := strconv.Atoi(context.Param("id"))
 
-	task := &models.Task{
-		Default: models.Default{
+	task := &entities.Task{
+		Default: entities.Default{
 			ID: uint(id),
 		},
 	}

@@ -4,13 +4,13 @@ import (
 	"net/http"
 	"strconv"
 	"todo-list/internal/common"
-	"todo-list/internal/models"
+	"todo-list/internal/entities"
 
 	"github.com/labstack/echo/v4"
 )
 
 func CreateIterationHandler(context echo.Context) error {
-	iteration := &models.Iteration{}
+	iteration := &entities.Iteration{}
 
 	if bindErr := context.Bind(iteration); bindErr != nil {
 		err := common.NewAppError(http.StatusBadRequest, bindErr)
@@ -26,7 +26,7 @@ func CreateIterationHandler(context echo.Context) error {
 }
 
 func UpdateIterationHandler(context echo.Context) error {
-	iteration := &models.Iteration{}
+	iteration := &entities.Iteration{}
 
 	context.Bind(iteration)
 
@@ -41,7 +41,7 @@ func UpdateIterationHandler(context echo.Context) error {
 }
 
 func ListIterationsHandler(context echo.Context) error {
-	var iterations []models.Iteration
+	var iterations []entities.Iteration
 
 	if err := ListIterationsService(&iterations); err != nil {
 		g_err := common.NewAppError(http.StatusBadRequest, err)
@@ -52,7 +52,7 @@ func ListIterationsHandler(context echo.Context) error {
 }
 
 func FindIterationHandler(context echo.Context) error {
-	iteration := &models.Iteration{}
+	iteration := &entities.Iteration{}
 
 	id, _ := strconv.Atoi(context.Param("id"))
 
@@ -67,8 +67,8 @@ func FindIterationHandler(context echo.Context) error {
 func DeleteIterationHandler(context echo.Context) error {
 	id, _ := strconv.Atoi(context.Param("id"))
 
-	iteration := &models.Iteration{
-		Default: models.Default{
+	iteration := &entities.Iteration{
+		Default: entities.Default{
 			ID: uint(id),
 		},
 	}

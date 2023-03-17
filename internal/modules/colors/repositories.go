@@ -2,28 +2,46 @@ package colors
 
 import (
 	"todo-list/internal/databases"
-	"todo-list/internal/models"
+	"todo-list/internal/entities"
 
 	"gorm.io/gorm"
 )
 
-func CreateColor(color *models.Color) (result *gorm.DB) {
-	return databases.PostgresDB.Create(color)
+type ColorRepository interface {
+	Create(color *entities.Color) *gorm.DB
+	List(colors *[]entities.Color) *gorm.DB
+	Find(id int, color *entities.Color) *gorm.DB
+	Update(id int, color *entities.Color) *gorm.DB
+	Delete(color *entities.Color) *gorm.DB
 }
 
-func ListColors(colors *[]models.Color) (result *gorm.DB) {
-	return databases.PostgresDB.Find(colors)
+type repository struct {
+	db *gorm.DB
 }
 
-func FindColor(id int, color *models.Color) (result *gorm.DB) {
-	return databases.PostgresDB.First(color, id)
+func NewColorRepository(db *gorm.DB) *repository {
+	return &repository{
+		db: db,
+	}
 }
 
-func UpdateColor(id int, color *models.Color) (result *gorm.DB) {
+func (r *repository) Create(color *entities.Color) (result *gorm.DB) {
+	return r.db.Create(color)
+}
+
+func (r *repository) List(colors *[]entities.Color) (result *gorm.DB) {
+	return r.db.Find(colors)
+}
+
+func (r *repository) Find(id int, color *entities.Color) (result *gorm.DB) {
+	return r.db.First(color, id)
+}
+
+func (r *repository) Update(id int, color *entities.Color) (result *gorm.DB) {
 	databases.PostgresDB.Model(color).Where("id = ?", id).Updates(color)
-	return FindColor(id, color)
+	return r.db.First(color, id)
 }
 
-func DeleteColor(color *models.Color) (result *gorm.DB) {
-	return databases.PostgresDB.Unscoped().Delete(color)
+func (r *repository) Delete(color *entities.Color) (result *gorm.DB) {
+	return r.db.Unscoped().Delete(color)
 }
