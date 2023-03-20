@@ -1,11 +1,19 @@
 package iterationsettings
 
-import "github.com/labstack/echo/v4"
+import (
+	"todo-list/internal/databases"
 
-func IterationSettingsRoutes(e *echo.Echo) {
-	e.GET("/iteration-settings", ListIterationSettingsHandler)
-	e.POST("/iteration-settings", CreateIterationSettingHandler)
-	e.PUT("/iteration-settings/:id", UpdateIterationSettingHandler)
-	e.DELETE("/iteration-settings/:id", DeleteIterationSettingHandler)
-	e.GET("/iteration-settings/:id", FindIterationSettingHandler)
+	"github.com/labstack/echo/v4"
+)
+
+func IterationSettingsRoutes(e *echo.Group) {
+	iterationSettingRepository := NewIterationSettingRepository(databases.PostgresDB)
+	iterationSettingService := NewIterationSettingService(iterationSettingRepository)
+	iterationSettingHandler := NewIterationSettingHandler(iterationSettingService)
+
+	e.GET("/iteration-settings", iterationSettingHandler.List)
+	e.POST("/iteration-settings", iterationSettingHandler.Create)
+	e.PUT("/iteration-settings/:id", iterationSettingHandler.Update)
+	e.DELETE("/iteration-settings/:id", iterationSettingHandler.Delete)
+	e.GET("/iteration-settings/:id", iterationSettingHandler.Find)
 }

@@ -1,11 +1,20 @@
 package users
 
-import "github.com/labstack/echo/v4"
+import (
+	"todo-list/internal/databases"
 
-func UserRoutes(e *echo.Echo) {
-	e.GET("/users", ListUsersHandler)
-	e.POST("/users", CreateUsersHandler)
-	e.PUT("/users/:id", UpdateUserHandler)
-	e.DELETE("/users/:id", DeleteUserHandler)
-	e.GET("/users/:id", FindUserHandler)
+	"github.com/labstack/echo/v4"
+)
+
+func UserRoutes(e *echo.Group) {
+
+	userRepository := NewUserRepository(databases.PostgresDB)
+	userService := NewUserService(userRepository)
+	userHandler := NewUserHandler(userService)
+
+	e.GET("/users", userHandler.List)
+	e.POST("/users", userHandler.Create)
+	e.PUT("/users/:id", userHandler.Update)
+	e.DELETE("/users/:id", userHandler.Delete)
+	e.GET("/users/:id", userHandler.Find)
 }

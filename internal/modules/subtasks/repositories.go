@@ -1,29 +1,46 @@
 package subtasks
 
 import (
-	"todo-list/internal/databases"
 	"todo-list/internal/entities"
 
 	"gorm.io/gorm"
 )
 
-func CreateSubTask(subtask *entities.SubTask) (result *gorm.DB) {
-	return databases.PostgresDB.Create(subtask)
+type SubTaskRepository interface {
+	Create(subtask *entities.SubTask) *gorm.DB
+	List(subtasks *[]entities.SubTask) *gorm.DB
+	Find(id int, subtask *entities.SubTask) *gorm.DB
+	Update(id int, subtask *entities.SubTask) *gorm.DB
+	Delete(subtask *entities.SubTask) *gorm.DB
 }
 
-func ListSubTasks(subtasks *[]entities.SubTask) (result *gorm.DB) {
-	return databases.PostgresDB.Find(subtasks)
+type repository struct {
+	db *gorm.DB
 }
 
-func FindSubTask(id int, subtask *entities.SubTask) (result *gorm.DB) {
-	return databases.PostgresDB.First(subtask, id)
+func NewSubTaskRepository(db *gorm.DB) *repository {
+	return &repository{
+		db: db,
+	}
 }
 
-func UpdateSubTask(id int, subtask *entities.SubTask) (result *gorm.DB) {
-	databases.PostgresDB.Model(subtask).Where("id = ?", id).Updates(subtask)
-	return FindSubTask(id, subtask)
+func (r *repository) Create(subtask *entities.SubTask) (result *gorm.DB) {
+	return r.db.Create(subtask)
 }
 
-func DeleteSubTask(subtask *entities.SubTask) (result *gorm.DB) {
-	return databases.PostgresDB.Unscoped().Delete(subtask)
+func (r *repository) List(subtasks *[]entities.SubTask) (result *gorm.DB) {
+	return r.db.Find(subtasks)
+}
+
+func (r *repository) Find(id int, subtask *entities.SubTask) (result *gorm.DB) {
+	return r.db.First(subtask, id)
+}
+
+func (r *repository) Update(id int, subtask *entities.SubTask) (result *gorm.DB) {
+	r.db.Model(subtask).Where("id = ?", id).Updates(subtask)
+	return r.db.First(subtask, id)
+}
+
+func (r *repository) Delete(subtask *entities.SubTask) (result *gorm.DB) {
+	return r.db.Unscoped().Delete(subtask)
 }

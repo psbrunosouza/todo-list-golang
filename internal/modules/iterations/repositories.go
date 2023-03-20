@@ -7,23 +7,41 @@ import (
 	"gorm.io/gorm"
 )
 
-func CreateIteration(iteration *entities.Iteration) (result *gorm.DB) {
-	return databases.PostgresDB.Create(iteration)
+type IterationRepository interface {
+	Create(iteration *entities.Iteration) *gorm.DB
+	List(iterations *[]entities.Iteration) *gorm.DB
+	Find(id int, iteration *entities.Iteration) *gorm.DB
+	Update(id int, iteration *entities.Iteration) *gorm.DB
+	Delete(iteration *entities.Iteration) *gorm.DB
 }
 
-func ListIterations(iteration *[]entities.Iteration) (result *gorm.DB) {
-	return databases.PostgresDB.Find(iteration)
+type repository struct {
+	db *gorm.DB
 }
 
-func FindIteration(id int, iteration *entities.Iteration) (result *gorm.DB) {
-	return databases.PostgresDB.First(iteration, id)
+func NewIterationRepository(db *gorm.DB) *repository {
+	return &repository{
+		db: db,
+	}
 }
 
-func UpdateIteration(id int, iteration *entities.Iteration) (result *gorm.DB) {
+func (r *repository) Create(iteration *entities.Iteration) (result *gorm.DB) {
+	return r.db.Create(iteration)
+}
+
+func (r *repository) List(iteration *[]entities.Iteration) (result *gorm.DB) {
+	return r.db.Find(iteration)
+}
+
+func (r *repository) Find(id int, iteration *entities.Iteration) (result *gorm.DB) {
+	return r.db.First(iteration, id)
+}
+
+func (r *repository) Update(id int, iteration *entities.Iteration) (result *gorm.DB) {
 	databases.PostgresDB.Model(iteration).Where("id = ?", id).Updates(iteration)
-	return FindIteration(id, iteration)
+	return r.db.First(iteration, id)
 }
 
-func DeleteIteration(iteration *entities.Iteration) (result *gorm.DB) {
-	return databases.PostgresDB.Unscoped().Delete(iteration)
+func (r *repository) Delete(iteration *entities.Iteration) (result *gorm.DB) {
+	return r.db.Unscoped().Delete(iteration)
 }

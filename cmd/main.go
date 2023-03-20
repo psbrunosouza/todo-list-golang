@@ -38,14 +38,16 @@ func init() {
 func main() {
 	echo := echo.New()
 
-	tasks.TasksRoutes(echo)
-	subtasks.SubTaskRoutes(echo)
-	workspaces.WorspaceRoutes(echo)
-	users.UserRoutes(echo)
-	ratings.RatingRoutes(echo)
-	colors.ColorRoutes(echo)
-	iterationsettings.IterationSettingsRoutes(echo)
-	iterations.IterationRoutes(echo)
+	api := echo.Group("/v1")
+
+	tasks.TasksRoutes(api)
+	subtasks.SubTaskRoutes(api)
+	workspaces.WorspaceRoutes(api)
+	users.UserRoutes(api)
+	ratings.RatingRoutes(api)
+	colors.ColorRoutes(api)
+	iterationsettings.IterationSettingsRoutes(api)
+	iterations.IterationRoutes(api)
 
 	echo.Logger.Fatal(echo.Start(os.Getenv("PORT")))
 }

@@ -1,41 +1,61 @@
 package iterations
 
-import "todo-list/internal/entities"
+import (
+	"todo-list/internal/entities"
+)
 
-func CreateIterationService(iteration *entities.Iteration) error {
-	if result := CreateIteration(iteration); result.Error != nil {
+type IterationService interface {
+	Create(iteration *entities.Iteration) error
+	List(iterations *[]entities.Iteration) error
+	Find(id int, iteration *entities.Iteration) error
+	Update(id int, iteration *entities.Iteration) error
+	Delete(iteration *entities.Iteration) error
+}
+
+type service struct {
+	repo IterationRepository
+}
+
+func NewIterationService(repo IterationRepository) *service {
+	return &service{
+		repo: repo,
+	}
+}
+
+func (s *service) Create(iteration *entities.Iteration) error {
+	if result := s.repo.Create(iteration); result.Error != nil {
 		return result.Error
 	} else {
 		return nil
 	}
 }
 
-func DeleteIterationService(iteration *entities.Iteration) error {
-	if result := DeleteIteration(iteration); result.Error != nil {
+func (s *service) Delete(iteration *entities.Iteration) error {
+	if result := s.repo.Delete(iteration); result.Error != nil {
 		return result.Error
 	} else {
 		return nil
 	}
 }
 
-func FindIterationService(id int, iteration *entities.Iteration) error {
-	if result := FindIteration(id, iteration); result.Error != nil {
+func (s *service) Find(id int, iteration *entities.Iteration) error {
+	if result := s.repo.Find(id, iteration); result.Error != nil {
 		return result.Error
 	} else {
 		return nil
 	}
 }
 
-func ListIterationsService(iteration *[]entities.Iteration) error {
-	if result := ListIterations(iteration); result.Error != nil {
+func (s *service) List(iterations *[]entities.Iteration) error {
+	if result := s.repo.List(iterations); result.Error != nil {
 		return result.Error
 	} else {
 		return nil
 	}
 }
 
-func UpdateIterationService(id int, iteration *entities.Iteration) error {
-	if result := UpdateIteration(id, iteration); result.Error != nil {
+func (s *service) Update(id int, iteration *entities.Iteration) error {
+	if result := s.repo.Update(id, iteration); result.Error != nil {
 		return result.Error
 	} else {
 		return nil

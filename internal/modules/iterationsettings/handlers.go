@@ -9,7 +9,25 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func CreateIterationSettingHandler(context echo.Context) error {
+type IterationSettingHandler interface {
+	Create(context echo.Context)
+	List(context echo.Context)
+	Get(context echo.Context)
+	Update(context echo.Context)
+	Delete(context echo.Context)
+}
+
+type handler struct {
+	service IterationSettingService
+}
+
+func NewIterationSettingHandler(service IterationSettingService) *handler {
+	return &handler{
+		service: service,
+	}
+}
+
+func (h *handler) Create(context echo.Context) error {
 	iterationSetting := &entities.IterationSetting{}
 
 	if bindErr := context.Bind(iterationSetting); bindErr != nil {
@@ -17,7 +35,7 @@ func CreateIterationSettingHandler(context echo.Context) error {
 		return context.JSON(http.StatusBadRequest, err)
 	}
 
-	if serviceErr := CreateIterationSettingService(iterationSetting); serviceErr != nil {
+	if serviceErr := h.service.Create(iterationSetting); serviceErr != nil {
 		err := common.NewAppError(http.StatusBadRequest, serviceErr)
 		return context.JSON(http.StatusBadRequest, err)
 	} else {
@@ -25,14 +43,14 @@ func CreateIterationSettingHandler(context echo.Context) error {
 	}
 }
 
-func UpdateIterationSettingHandler(context echo.Context) error {
+func (h *handler) Update(context echo.Context) error {
 	iterationSetting := &entities.IterationSetting{}
 
 	context.Bind(iterationSetting)
 
 	id, _ := strconv.Atoi(context.Param("id"))
 
-	if err := UpdateIterationSettingService(id, iterationSetting); err != nil {
+	if err := h.service.Update(id, iterationSetting); err != nil {
 		g_err := common.NewAppError(http.StatusBadRequest, err)
 		return context.JSON(http.StatusBadRequest, g_err)
 	} else {
@@ -40,10 +58,10 @@ func UpdateIterationSettingHandler(context echo.Context) error {
 	}
 }
 
-func ListIterationSettingsHandler(context echo.Context) error {
+func (h *handler) List(context echo.Context) error {
 	var iterationSettings []entities.IterationSetting
 
-	if err := ListIterationSettingsService(&iterationSettings); err != nil {
+	if err := h.service.List(&iterationSettings); err != nil {
 		g_err := common.NewAppError(http.StatusBadRequest, err)
 		return context.JSON(http.StatusBadRequest, g_err)
 	} else {
@@ -51,12 +69,12 @@ func ListIterationSettingsHandler(context echo.Context) error {
 	}
 }
 
-func FindIterationSettingHandler(context echo.Context) error {
+func (h *handler) Find(context echo.Context) error {
 	iterationSetting := &entities.IterationSetting{}
 
 	id, _ := strconv.Atoi(context.Param("id"))
 
-	if err := FindIterationSettingService(id, iterationSetting); err != nil {
+	if err := h.service.Find(id, iterationSetting); err != nil {
 		g_err := common.NewAppError(http.StatusNotFound, "Record not found")
 		return context.JSON(http.StatusBadRequest, g_err)
 	} else {
@@ -64,7 +82,7 @@ func FindIterationSettingHandler(context echo.Context) error {
 	}
 }
 
-func DeleteIterationSettingHandler(context echo.Context) error {
+func (h *handler) Delete(context echo.Context) error {
 	id, _ := strconv.Atoi(context.Param("id"))
 
 	iterationSetting := &entities.IterationSetting{
@@ -73,7 +91,7 @@ func DeleteIterationSettingHandler(context echo.Context) error {
 		},
 	}
 
-	if err := DeleteIterationSettingService(iterationSetting); err != nil {
+	if err := h.service.Delete(iterationSetting); err != nil {
 		g_err := common.NewAppError(http.StatusBadRequest, err)
 		return context.JSON(http.StatusBadRequest, g_err)
 	} else {

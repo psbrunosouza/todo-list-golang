@@ -9,7 +9,25 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func CreateUsersHandler(context echo.Context) error {
+type UserHandler interface {
+	Create(context echo.Context)
+	List(context echo.Context)
+	Get(context echo.Context)
+	Update(context echo.Context)
+	Delete(context echo.Context)
+}
+
+type handler struct {
+	service UserService
+}
+
+func NewUserHandler(service UserService) *handler {
+	return &handler{
+		service: service,
+	}
+}
+
+func (h *handler) Create(context echo.Context) error {
 	user := &entities.User{}
 
 	if bindErr := context.Bind(user); bindErr != nil {
@@ -17,7 +35,7 @@ func CreateUsersHandler(context echo.Context) error {
 		return context.JSON(http.StatusBadRequest, err)
 	}
 
-	if serviceErr := CreateUserService(user); serviceErr != nil {
+	if serviceErr := h.service.Create(user); serviceErr != nil {
 		err := common.NewAppError(http.StatusBadRequest, serviceErr)
 		return context.JSON(http.StatusBadRequest, err)
 	} else {
@@ -25,14 +43,14 @@ func CreateUsersHandler(context echo.Context) error {
 	}
 }
 
-func UpdateUserHandler(context echo.Context) error {
+func (h *handler) Update(context echo.Context) error {
 	user := &entities.User{}
 
 	context.Bind(user)
 
 	id, _ := strconv.Atoi(context.Param("id"))
 
-	if err := UpdateUserService(id, user); err != nil {
+	if err := h.service.Update(id, user); err != nil {
 		g_err := common.NewAppError(http.StatusBadRequest, err)
 		return context.JSON(http.StatusBadRequest, g_err)
 	} else {
@@ -40,10 +58,10 @@ func UpdateUserHandler(context echo.Context) error {
 	}
 }
 
-func ListUsersHandler(context echo.Context) error {
+func (h *handler) List(context echo.Context) error {
 	var users []entities.User
 
-	if err := ListUsersService(&users); err != nil {
+	if err := h.service.List(&users); err != nil {
 		g_err := common.NewAppError(http.StatusBadRequest, err)
 		return context.JSON(http.StatusBadRequest, g_err)
 	} else {
@@ -51,12 +69,12 @@ func ListUsersHandler(context echo.Context) error {
 	}
 }
 
-func FindUserHandler(context echo.Context) error {
+func (h *handler) Find(context echo.Context) error {
 	user := &entities.User{}
 
 	id, _ := strconv.Atoi(context.Param("id"))
 
-	if err := FindUserService(id, user); err != nil {
+	if err := h.service.Find(id, user); err != nil {
 		g_err := common.NewAppError(http.StatusBadRequest, "Record not found")
 		return context.JSON(http.StatusBadRequest, g_err)
 	} else {
@@ -64,7 +82,7 @@ func FindUserHandler(context echo.Context) error {
 	}
 }
 
-func DeleteUserHandler(context echo.Context) error {
+func (h *handler) Delete(context echo.Context) error {
 	id, _ := strconv.Atoi(context.Param("id"))
 
 	user := &entities.User{
@@ -73,10 +91,10 @@ func DeleteUserHandler(context echo.Context) error {
 		},
 	}
 
-	if err := DeleteUserService(user); err != nil {
+	if err := h.service.Delete(user); err != nil {
 		g_err := common.NewAppError(http.StatusBadRequest, err)
 		return context.JSON(http.StatusBadRequest, g_err)
 	} else {
-		return context.JSON(http.StatusOK, string("{}"))
+		return context.JSON(http.StatusOK, &struct{}{})
 	}
 }

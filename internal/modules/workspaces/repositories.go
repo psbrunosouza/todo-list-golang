@@ -1,29 +1,46 @@
 package workspaces
 
 import (
-	"todo-list/internal/databases"
 	"todo-list/internal/entities"
 
 	"gorm.io/gorm"
 )
 
-func CreateWorkspace(workspace *entities.Workspace) (result *gorm.DB) {
-	return databases.PostgresDB.Create(workspace)
+type WorkspaceRepository interface {
+	Create(workspace *entities.Workspace) *gorm.DB
+	List(workspaces *[]entities.Workspace) *gorm.DB
+	Find(id int, workspace *entities.Workspace) *gorm.DB
+	Update(id int, workspace *entities.Workspace) *gorm.DB
+	Delete(workspace *entities.Workspace) *gorm.DB
 }
 
-func ListWorkspace(workspaces *[]entities.Workspace) (result *gorm.DB) {
-	return databases.PostgresDB.Preload("Tasks").Preload("Tasks.Workspace").Find(workspaces)
+type repository struct {
+	db *gorm.DB
 }
 
-func FindWorkspace(id int, workspace *entities.Workspace) (result *gorm.DB) {
-	return databases.PostgresDB.Preload("Tasks").Preload("Tasks.Workspace").First(workspace, id)
+func NewWorkspaceRepository(db *gorm.DB) *repository {
+	return &repository{
+		db: db,
+	}
 }
 
-func UpdateWorkspace(id int, workspace *entities.Workspace) (result *gorm.DB) {
-	databases.PostgresDB.Model(workspace).Where("id = ?", id).Updates(workspace)
-	return FindWorkspace(id, workspace)
+func (r *repository) Create(workspace *entities.Workspace) (result *gorm.DB) {
+	return r.db.Create(workspace)
 }
 
-func DeleteWorkspace(workspace *entities.Workspace) (result *gorm.DB) {
-	return databases.PostgresDB.Unscoped().Delete(workspace)
+func (r *repository) List(workspaces *[]entities.Workspace) (result *gorm.DB) {
+	return r.db.Preload("Tasks").Preload("Tasks.Workspace").Find(workspaces)
+}
+
+func (r *repository) Find(id int, workspace *entities.Workspace) (result *gorm.DB) {
+	return r.db.Preload("Tasks").Preload("Tasks.Workspace").First(workspace, id)
+}
+
+func (r *repository) Update(id int, workspace *entities.Workspace) (result *gorm.DB) {
+	r.db.Model(workspace).Where("id = ?", id).Updates(workspace)
+	return r.db.Preload("Tasks").Preload("Tasks.Workspace").First(workspace, id)
+}
+
+func (r *repository) Delete(workspace *entities.Workspace) (result *gorm.DB) {
+	return r.db.Unscoped().Delete(workspace)
 }

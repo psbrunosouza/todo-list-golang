@@ -1,46 +1,61 @@
 package colors
 
 import (
-	"todo-list/internal/databases"
 	"todo-list/internal/entities"
 )
 
-var colorRepository ColorRepository = NewColorRepository(databases.PostgresDB)
+type ColorService interface {
+	Create(color *entities.Color) error
+	List(colors *[]entities.Color) error
+	Find(id int, color *entities.Color) error
+	Update(id int, color *entities.Color) error
+	Delete(color *entities.Color) error
+}
 
-func CreateColorService(color *entities.Color) error {
-	if result := colorRepository.Create(color); result.Error != nil {
+type service struct {
+	repo ColorRepository
+}
+
+func NewColorService(repo ColorRepository) *service {
+	return &service{
+		repo: repo,
+	}
+}
+
+func (s *service) Create(color *entities.Color) error {
+	if result := s.repo.Create(color); result.Error != nil {
 		return result.Error
 	} else {
 		return nil
 	}
 }
 
-func DeleteColorService(color *entities.Color) error {
-	if result := colorRepository.Delete(color); result.Error != nil {
+func (s *service) Delete(color *entities.Color) error {
+	if result := s.repo.Delete(color); result.Error != nil {
 		return result.Error
 	} else {
 		return nil
 	}
 }
 
-func FindColorService(id int, color *entities.Color) error {
-	if result := colorRepository.Find(id, color); result.Error != nil {
+func (s *service) Find(id int, color *entities.Color) error {
+	if result := s.repo.Find(id, color); result.Error != nil {
 		return result.Error
 	} else {
 		return nil
 	}
 }
 
-func ListColorsService(colors *[]entities.Color) error {
-	if result := colorRepository.List(colors); result.Error != nil {
+func (s *service) List(colors *[]entities.Color) error {
+	if result := s.repo.List(colors); result.Error != nil {
 		return result.Error
 	} else {
 		return nil
 	}
 }
 
-func UpdateColorService(id int, color *entities.Color) error {
-	if result := colorRepository.Update(id, color); result.Error != nil {
+func (s *service) Update(id int, color *entities.Color) error {
+	if result := s.repo.Update(id, color); result.Error != nil {
 		return result.Error
 	} else {
 		return nil

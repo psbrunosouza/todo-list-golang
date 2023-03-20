@@ -7,23 +7,41 @@ import (
 	"gorm.io/gorm"
 )
 
-func CreateIterationSetting(iterationSetting *entities.IterationSetting) (result *gorm.DB) {
-	return databases.PostgresDB.Create(iterationSetting)
+type IterationSettingRepository interface {
+	Create(iterationSetting *entities.IterationSetting) *gorm.DB
+	List(iterationSettings *[]entities.IterationSetting) *gorm.DB
+	Find(id int, iterationSetting *entities.IterationSetting) *gorm.DB
+	Update(id int, iterationSetting *entities.IterationSetting) *gorm.DB
+	Delete(iterationSetting *entities.IterationSetting) *gorm.DB
 }
 
-func ListIterationSettings(iterationSetting *[]entities.IterationSetting) (result *gorm.DB) {
-	return databases.PostgresDB.Find(iterationSetting)
+type repository struct {
+	db *gorm.DB
 }
 
-func FindIterationSetting(id int, iterationSetting *entities.IterationSetting) (result *gorm.DB) {
-	return databases.PostgresDB.First(iterationSetting, id)
+func NewIterationSettingRepository(db *gorm.DB) *repository {
+	return &repository{
+		db: db,
+	}
 }
 
-func UpdateIterationSetting(id int, iterationSetting *entities.IterationSetting) (result *gorm.DB) {
+func (r *repository) Create(iterationSetting *entities.IterationSetting) (result *gorm.DB) {
+	return r.db.Create(iterationSetting)
+}
+
+func (r *repository) List(iterationSetting *[]entities.IterationSetting) (result *gorm.DB) {
+	return r.db.Find(iterationSetting)
+}
+
+func (r *repository) Find(id int, iterationSetting *entities.IterationSetting) (result *gorm.DB) {
+	return r.db.First(iterationSetting, id)
+}
+
+func (r *repository) Update(id int, iterationSetting *entities.IterationSetting) (result *gorm.DB) {
 	databases.PostgresDB.Model(iterationSetting).Where("id = ?", id).Updates(iterationSetting)
-	return FindIterationSetting(id, iterationSetting)
+	return r.db.First(iterationSetting, id)
 }
 
-func DeleteIterationSetting(iterationSetting *entities.IterationSetting) (result *gorm.DB) {
-	return databases.PostgresDB.Unscoped().Delete(iterationSetting)
+func (r *repository) Delete(iterationSetting *entities.IterationSetting) (result *gorm.DB) {
+	return r.db.Unscoped().Delete(iterationSetting)
 }

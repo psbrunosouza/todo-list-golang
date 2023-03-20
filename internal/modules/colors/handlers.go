@@ -9,7 +9,25 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func CreateColorHandler(context echo.Context) error {
+type ColorHandler interface {
+	Create(context echo.Context)
+	List(context echo.Context)
+	Get(context echo.Context)
+	Update(context echo.Context)
+	Delete(context echo.Context)
+}
+
+type handler struct {
+	service ColorService
+}
+
+func NewColorHandler(service ColorService) *handler {
+	return &handler{
+		service: service,
+	}
+}
+
+func (h *handler) Create(context echo.Context) error {
 	color := &entities.Color{}
 
 	if bindErr := context.Bind(color); bindErr != nil {
@@ -17,7 +35,7 @@ func CreateColorHandler(context echo.Context) error {
 		return context.JSON(http.StatusBadRequest, err)
 	}
 
-	if serviceErr := CreateColorService(color); serviceErr != nil {
+	if serviceErr := h.service.Create(color); serviceErr != nil {
 		err := common.NewAppError(http.StatusBadRequest, serviceErr)
 		return context.JSON(http.StatusBadRequest, err)
 	} else {
@@ -25,14 +43,14 @@ func CreateColorHandler(context echo.Context) error {
 	}
 }
 
-func UpdateColorHandler(context echo.Context) error {
+func (h *handler) Update(context echo.Context) error {
 	color := &entities.Color{}
 
 	context.Bind(color)
 
 	id, _ := strconv.Atoi(context.Param("id"))
 
-	if err := UpdateColorService(id, color); err != nil {
+	if err := h.service.Update(id, color); err != nil {
 		g_err := common.NewAppError(http.StatusBadRequest, err)
 		return context.JSON(http.StatusBadRequest, g_err)
 	} else {
@@ -40,10 +58,10 @@ func UpdateColorHandler(context echo.Context) error {
 	}
 }
 
-func ListColorsHandler(context echo.Context) error {
+func (h *handler) List(context echo.Context) error {
 	var colors []entities.Color
 
-	if err := ListColorsService(&colors); err != nil {
+	if err := h.service.List(&colors); err != nil {
 		g_err := common.NewAppError(http.StatusBadRequest, err)
 		return context.JSON(http.StatusBadRequest, g_err)
 	} else {
@@ -51,12 +69,12 @@ func ListColorsHandler(context echo.Context) error {
 	}
 }
 
-func FindColorHandler(context echo.Context) error {
+func (h *handler) Find(context echo.Context) error {
 	color := &entities.Color{}
 
 	id, _ := strconv.Atoi(context.Param("id"))
 
-	if err := FindColorService(id, color); err != nil {
+	if err := h.service.Find(id, color); err != nil {
 		g_err := common.NewAppError(http.StatusNotFound, "Record not found")
 		return context.JSON(http.StatusBadRequest, g_err)
 	} else {
@@ -64,7 +82,7 @@ func FindColorHandler(context echo.Context) error {
 	}
 }
 
-func DeleteColorHandler(context echo.Context) error {
+func (h *handler) Delete(context echo.Context) error {
 	id, _ := strconv.Atoi(context.Param("id"))
 
 	color := &entities.Color{
@@ -73,7 +91,7 @@ func DeleteColorHandler(context echo.Context) error {
 		},
 	}
 
-	if err := DeleteColorService(color); err != nil {
+	if err := h.service.Delete(color); err != nil {
 		g_err := common.NewAppError(http.StatusBadRequest, err)
 		return context.JSON(http.StatusBadRequest, g_err)
 	} else {

@@ -9,7 +9,25 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func CreateSubTaskHandler(context echo.Context) error {
+type SubTaskHandler interface {
+	Create(context echo.Context)
+	List(context echo.Context)
+	Get(context echo.Context)
+	Update(context echo.Context)
+	Delete(context echo.Context)
+}
+
+type handler struct {
+	service SubTaskService
+}
+
+func NewSubTaskHandler(service SubTaskService) *handler {
+	return &handler{
+		service: service,
+	}
+}
+
+func (h *handler) Create(context echo.Context) error {
 	subtask := &entities.SubTask{}
 
 	if bindErr := context.Bind(subtask); bindErr != nil {
@@ -17,7 +35,7 @@ func CreateSubTaskHandler(context echo.Context) error {
 		return context.JSON(http.StatusBadRequest, err)
 	}
 
-	if serviceErr := CreateSubTaskService(subtask); serviceErr != nil {
+	if serviceErr := h.service.Create(subtask); serviceErr != nil {
 		err := common.NewAppError(http.StatusBadRequest, serviceErr)
 		return context.JSON(http.StatusBadRequest, err)
 	} else {
@@ -25,14 +43,14 @@ func CreateSubTaskHandler(context echo.Context) error {
 	}
 }
 
-func UpdateSubTaskHandler(context echo.Context) error {
+func (h *handler) Update(context echo.Context) error {
 	subtask := &entities.SubTask{}
 
 	context.Bind(subtask)
 
 	id, _ := strconv.Atoi(context.Param("id"))
 
-	if err := UpdateSubTaskService(id, subtask); err != nil {
+	if err := h.service.Update(id, subtask); err != nil {
 		g_err := common.NewAppError(http.StatusBadRequest, err)
 		return context.JSON(http.StatusBadRequest, g_err)
 	} else {
@@ -40,7 +58,7 @@ func UpdateSubTaskHandler(context echo.Context) error {
 	}
 }
 
-func DeleteSubTaskHandler(context echo.Context) error {
+func (h *handler) Delete(context echo.Context) error {
 	id, _ := strconv.Atoi(context.Param("id"))
 
 	subtask := &entities.SubTask{
@@ -49,7 +67,7 @@ func DeleteSubTaskHandler(context echo.Context) error {
 		},
 	}
 
-	if err := DeleteSubTaskService(subtask); err != nil {
+	if err := h.service.Delete(subtask); err != nil {
 		g_err := common.NewAppError(http.StatusBadRequest, err)
 		return context.JSON(http.StatusBadRequest, g_err)
 	} else {
@@ -57,12 +75,12 @@ func DeleteSubTaskHandler(context echo.Context) error {
 	}
 }
 
-func FindSubTaskHandler(context echo.Context) error {
+func (h *handler) Find(context echo.Context) error {
 	subtask := &entities.SubTask{}
 
 	id, _ := strconv.Atoi(context.Param("id"))
 
-	if err := FindSubTaskService(id, subtask); err != nil {
+	if err := h.service.Find(id, subtask); err != nil {
 		g_err := common.NewAppError(http.StatusBadRequest, "Record not found")
 		return context.JSON(http.StatusBadRequest, g_err)
 	} else {
@@ -70,10 +88,10 @@ func FindSubTaskHandler(context echo.Context) error {
 	}
 }
 
-func ListSubTasksHandler(context echo.Context) error {
+func (h *handler) List(context echo.Context) error {
 	var subtasks []entities.SubTask
 
-	if err := ListSubTasksService(&subtasks); err != nil {
+	if err := h.service.List(&subtasks); err != nil {
 		g_err := common.NewAppError(http.StatusBadRequest, err)
 		return context.JSON(http.StatusBadRequest, g_err)
 	} else {

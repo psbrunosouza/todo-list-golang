@@ -9,7 +9,25 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func CreateTaskHandler(context echo.Context) error {
+type TaskHandler interface {
+	Create(context echo.Context)
+	List(context echo.Context)
+	Get(context echo.Context)
+	Update(context echo.Context)
+	Delete(context echo.Context)
+}
+
+type handler struct {
+	service TaskService
+}
+
+func NewTaskHandler(service TaskService) *handler {
+	return &handler{
+		service: service,
+	}
+}
+
+func (h *handler) Create(context echo.Context) error {
 	task := &entities.Task{}
 
 	if bindErr := context.Bind(task); bindErr != nil {
@@ -17,7 +35,7 @@ func CreateTaskHandler(context echo.Context) error {
 		return context.JSON(http.StatusBadRequest, err)
 	}
 
-	if serviceErr := CreateTaskService(task); serviceErr != nil {
+	if serviceErr := h.service.Create(task); serviceErr != nil {
 		err := common.NewAppError(http.StatusBadRequest, serviceErr)
 		return context.JSON(http.StatusBadRequest, err)
 	} else {
@@ -25,14 +43,14 @@ func CreateTaskHandler(context echo.Context) error {
 	}
 }
 
-func UpdateTaskHandler(context echo.Context) error {
+func (h *handler) Update(context echo.Context) error {
 	task := &entities.Task{}
 
 	context.Bind(task)
 
 	id, _ := strconv.Atoi(context.Param("id"))
 
-	if err := UpdateTaskService(id, task); err != nil {
+	if err := h.service.Update(id, task); err != nil {
 		g_err := common.NewAppError(http.StatusBadRequest, err)
 		return context.JSON(http.StatusBadRequest, g_err)
 	} else {
@@ -40,10 +58,10 @@ func UpdateTaskHandler(context echo.Context) error {
 	}
 }
 
-func ListTaskHandler(context echo.Context) error {
+func (h *handler) List(context echo.Context) error {
 	var tasks []entities.Task
 
-	if err := ListTasksService(&tasks); err != nil {
+	if err := h.service.List(&tasks); err != nil {
 		g_err := common.NewAppError(http.StatusBadRequest, err)
 		return context.JSON(http.StatusBadRequest, g_err)
 	} else {
@@ -52,12 +70,12 @@ func ListTaskHandler(context echo.Context) error {
 	}
 }
 
-func FindTaskHandler(context echo.Context) error {
+func (h *handler) Find(context echo.Context) error {
 	task := &entities.Task{}
 
 	id, _ := strconv.Atoi(context.Param("id"))
 
-	if err := FindTaskService(id, task); err != nil {
+	if err := h.service.Find(id, task); err != nil {
 		g_err := common.NewAppError(http.StatusBadRequest, "Record not found")
 		return context.JSON(http.StatusBadRequest, g_err)
 	} else {
@@ -65,7 +83,7 @@ func FindTaskHandler(context echo.Context) error {
 	}
 }
 
-func DeleteTaskHandler(context echo.Context) error {
+func (h *handler) Delete(context echo.Context) error {
 	id, _ := strconv.Atoi(context.Param("id"))
 
 	task := &entities.Task{
@@ -74,7 +92,7 @@ func DeleteTaskHandler(context echo.Context) error {
 		},
 	}
 
-	if err := DeleteTaskService(task); err != nil {
+	if err := h.service.Delete(task); err != nil {
 		g_err := common.NewAppError(http.StatusBadRequest, err)
 		return context.JSON(http.StatusBadRequest, g_err)
 	} else {
